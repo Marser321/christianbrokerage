@@ -66,7 +66,7 @@ export function Values() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.3 }}
-            className="text-lg text-white/50"
+            className="text-lg text-white/70"
           >
             No es lo que vendemos. Es{' '}
             <strong className="text-white/80">cómo te tratamos</strong>.
@@ -105,7 +105,7 @@ export function Values() {
                 <h3 className="text-lg font-serif font-bold text-white mb-3">
                   {value.title}
                 </h3>
-                <p className="text-sm text-white/40 leading-relaxed">
+                <p className="text-sm text-white/70 leading-relaxed">
                   {value.desc}
                 </p>
               </div>

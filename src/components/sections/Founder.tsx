@@ -66,7 +66,7 @@ export function Founder() {
                     <p className="text-sm font-semibold text-primary">
                       Disponible para consultas
                     </p>
-                    <p className="text-xs text-neutral-400">
+                    <p className="text-xs text-neutral-500 font-medium">
                       Respuesta en menos de 24h
                     </p>
                   </div>
@@ -109,7 +109,7 @@ export function Founder() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="space-y-4 text-neutral-500 leading-relaxed mb-10"
+              className="space-y-4 text-neutral-700 leading-relaxed mb-10"
             >
               <p>
                 Inelvis no es solo la fundadora de FCIG. Es la persona que se
@@ -152,7 +152,7 @@ export function Founder() {
                   className="px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60"
                 >
                   <p className="text-sm font-bold text-primary">{cred.label}</p>
-                  <p className="text-xs text-neutral-400">{cred.sub}</p>
+                  <p className="text-xs text-neutral-500 font-medium">{cred.sub}</p>
                 </div>
               ))}
             </motion.div>

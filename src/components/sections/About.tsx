@@ -68,7 +68,7 @@ export function About() {
                 transition={{ delay: 0.5 }}
                 className="absolute -bottom-5 -right-5 glass-panel rounded-2xl px-5 py-3 shadow-xl"
               >
-                <p className="text-xs text-neutral-400 mb-1">Desde</p>
+                <p className="text-xs text-neutral-500 font-medium mb-1">Desde</p>
                 <p className="text-2xl font-serif font-bold text-primary">2020</p>
               </motion.div>
             </motion.div>
@@ -99,7 +99,7 @@ export function About() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="space-y-4 text-neutral-500 leading-relaxed mb-10"
+              className="space-y-4 text-neutral-700 leading-relaxed mb-10"
             >
               <p>
                 ¿Alguna vez sentiste que nadie te explicó bien tu seguro? En{' '}
@@ -130,7 +130,7 @@ export function About() {
                   <div className="text-3xl md:text-4xl font-serif font-bold text-primary mb-1">
                     <NumberTicker value={stat.value} suffix={stat.suffix} delay={0.2 + i * 0.15} />
                   </div>
-                  <p className="text-xs text-neutral-400 uppercase tracking-wider">
+                  <p className="text-xs text-neutral-500 font-semibold uppercase tracking-wider">
                     {stat.label}
                   </p>
                 </motion.div>

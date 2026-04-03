@@ -255,7 +255,7 @@ export function ContactSection() {
                           <h3 className="text-2xl md:text-3xl font-serif font-bold text-white mb-2 text-center">
                             ¿Qué te gustaría asegurar?
                           </h3>
-                          <p className="text-sm text-white/60 mb-8 text-center px-4">
+                          <p className="text-sm text-white/75 mb-8 text-center px-4">
                             Selecciona una opción para avanzar
                           </p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
@@ -286,7 +286,7 @@ export function ContactSection() {
                               <h3 className="text-2xl font-serif font-bold text-white leading-tight">
                                 Excelente elección.
                               </h3>
-                              <p className="text-sm text-white/60">
+                              <p className="text-sm text-white/70">
                                 Dinos a dónde te contactamos y listo.
                               </p>
                             </div>

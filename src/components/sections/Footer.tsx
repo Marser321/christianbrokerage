@@ -39,7 +39,7 @@ export function Footer() {
             <div className="bg-white/95 px-4 py-3 rounded-2xl w-max mb-6 inline-block">
               <img src="/src/assets/images/logo-fcig.png" alt="FCIG" className="h-8 w-auto mix-blend-multiply" />
             </div>
-            <p className="text-white/40 text-sm leading-relaxed mb-6">
+            <p className="text-white/65 text-sm leading-relaxed mb-6">
               Tu familia, tu negocio, tu tranquilidad. Nosotros los cuidamos.
             </p>
             {/* Social icons */}
@@ -81,7 +81,7 @@ export function Footer() {
                   <a
                     href={link.href}
                     onClick={(e) => handleClick(e, link.href)}
-                    className="text-white/40 hover:text-accent text-sm transition-colors duration-300"
+                    className="text-white/60 hover:text-accent text-sm transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -101,7 +101,7 @@ export function Footer() {
                   <a
                     href={link.href}
                     onClick={(e) => handleClick(e, link.href)}
-                    className="text-white/40 hover:text-accent text-sm transition-colors duration-300"
+                    className="text-white/60 hover:text-accent text-sm transition-colors duration-300"
                   >
                     {link.label}
                   </a>
@@ -118,7 +118,7 @@ export function Footer() {
             <div className="space-y-4">
               <a
                 href="tel:3059741833"
-                className="flex items-center gap-3 text-white/40 hover:text-accent text-sm transition-colors group"
+                className="flex items-center gap-3 text-white/60 hover:text-accent text-sm transition-colors group"
               >
                 <Phone
                   size={14}
@@ -128,7 +128,7 @@ export function Footer() {
               </a>
               <a
                 href="mailto:info@thefcig.com"
-                className="flex items-center gap-3 text-white/40 hover:text-accent text-sm transition-colors group"
+                className="flex items-center gap-3 text-white/60 hover:text-accent text-sm transition-colors group"
               >
                 <Mail
                   size={14}
@@ -136,12 +136,12 @@ export function Footer() {
                 />
                 info@thefcig.com
               </a>
-              <div className="flex items-start gap-3 text-white/40 text-sm">
+              <div className="flex items-start gap-3 text-white/60 text-sm">
                 <MapPin size={14} className="flex-shrink-0 mt-0.5" />
                 <span>
                   Florida & Texas
                   <br />
-                  <span className="text-white/25">Agencia con Licencia</span>
+                  <span className="text-white/50">Agencia con Licencia</span>
                 </span>
               </div>
             </div>
@@ -150,15 +150,15 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-white/25 text-sm">
+          <p className="text-white/55 text-sm">
             © {currentYear} First Choice Insurance Group. Todos los derechos
             reservados.
           </p>
-          <div className="flex gap-6 text-white/25 text-sm">
-            <a href="#" className="hover:text-white/40 transition-colors">
+          <div className="flex gap-6 text-white/50 text-sm">
+            <a href="#" className="hover:text-white/70 transition-colors">
               Privacidad
             </a>
-            <a href="#" className="hover:text-white/40 transition-colors">
+            <a href="#" className="hover:text-white/70 transition-colors">
               Términos
             </a>
           </div>

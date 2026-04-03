@@ -126,7 +126,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.9, duration: 0.7, ease: cubicEase }}
-              className="text-lg md:text-xl text-neutral-500 mb-10 max-w-xl leading-relaxed"
+              className="text-lg md:text-xl text-neutral-600 mb-10 max-w-xl leading-relaxed"
             >
               Elegir un seguro no debería ser confuso. Te explicamos cada opción en
               español, <strong className="text-primary">sin letras pequeñas</strong>, para
@@ -168,7 +168,7 @@ export function Hero() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1.2 }}
-              className="text-xs text-neutral-400 -mt-6 mb-8 ml-1"
+              className="text-xs text-neutral-500 -mt-6 mb-8 ml-1"
             >
               Sin compromiso. Hablamos español. Es rápido y 100% gratis.
             </motion.p>
@@ -193,7 +193,7 @@ export function Hero() {
                   </div>
                   <div>
                     <p className="font-bold text-primary text-sm">{stat.value}</p>
-                    <p className="text-xs text-neutral-400">{stat.label}</p>
+                    <p className="text-xs text-neutral-500 font-medium">{stat.label}</p>
                   </div>
                 </motion.div>
               ))}
@@ -239,7 +239,7 @@ export function Hero() {
                   </div>
                   <div>
                     <p className="font-semibold text-primary text-sm">Todo Cubierto</p>
-                    <p className="text-xs text-neutral-400">Auto • Hogar • Negocio</p>
+                    <p className="text-xs text-neutral-500 font-medium">Auto • Hogar • Negocio</p>
                   </div>
                 </div>
               </motion.div>
@@ -260,7 +260,7 @@ export function Hero() {
                       />
                     ))}
                   </div>
-                  <p className="text-xs text-neutral-500 ml-1">
+                  <p className="text-xs text-neutral-600 font-medium ml-1">
                     <strong className="text-primary">+500</strong> familias ya confían en nosotros
                   </p>
                 </div>

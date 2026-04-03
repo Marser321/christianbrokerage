@@ -125,7 +125,7 @@ function MobileChapterCard({ chapter, index, onInView }: { chapter: any, index: 
         className="h-0.5 w-12 rounded-full mb-6"
         style={{ backgroundColor: chapter.accent }}
       />
-      <p className="text-white/80 leading-relaxed mb-6">{chapter.body}</p>
+      <p className="text-white/90 leading-relaxed mb-6">{chapter.body}</p>
       <div className="flex items-baseline gap-2 pt-4 border-t border-white/10">
         <span className="text-2xl font-serif font-bold text-white">
           <NumberTicker
@@ -134,7 +134,7 @@ function MobileChapterCard({ chapter, index, onInView }: { chapter: any, index: 
             delay={0.1}
           />
         </span>
-        <span className="text-white/40 text-xs uppercase tracking-wider">
+        <span className="text-white/65 text-xs uppercase tracking-wider">
           {chapter.stat.label}
         </span>
       </div>
@@ -243,8 +243,8 @@ export function Storytelling() {
             />
           </motion.div>
         </AnimatePresence>
-        {/* Lighter Gradient mask to let the images pop but keep text readable */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a2540]/40 to-[#0a2540]/60" />
+        {/* Stronger gradient mask to guarantee text readability over any blob/bg combo */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0a2540]/70 to-[#0a2540]/50" />
       </div>
 
       {/* Noise */}
@@ -309,7 +309,7 @@ export function Storytelling() {
                               delay={0.1}
                             />
                           </span>
-                          <span className="text-white/60 text-sm uppercase tracking-wider">
+                          <span className="text-white/75 text-sm uppercase tracking-wider">
                             {current.stat.label}
                           </span>
                         </div>
@@ -345,7 +345,7 @@ export function Storytelling() {
                         }}
                       />
                       {/* Tooltip */}
-                      <span className="absolute left-6 whitespace-nowrap text-xs font-medium text-white/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                      <span className="absolute left-6 whitespace-nowrap text-xs font-medium text-white/70 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                         {ch.badge}
                       </span>
                     </button>
@@ -388,7 +388,7 @@ export function Storytelling() {
                         >
                           Capítulo {String(i + 1).padStart(2, '0')}
                         </span>
-                        <div className="text-xs text-white/50">{chapter.badge}</div>
+                        <div className="text-xs text-white/65">{chapter.badge}</div>
                       </div>
                     </motion.div>
 
@@ -419,7 +419,7 @@ export function Storytelling() {
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, margin: '-20%' }}
                       transition={{ duration: 0.7, delay: 0.2 }}
-                      className="text-base xl:text-lg text-white/70 leading-relaxed mb-8"
+                      className="text-base xl:text-lg text-white/85 leading-relaxed mb-8"
                     >
                       {chapter.body}
                     </motion.p>
