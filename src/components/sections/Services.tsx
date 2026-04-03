@@ -235,7 +235,7 @@ export function Services() {
           ref={trackRef}
           className="flex h-screen items-center"
         >
-          {services.map((service, index) => (
+          {services.map((service, _index) => (
             <div
               key={service.title}
               className="w-screen h-screen flex-shrink-0 flex items-center relative"
