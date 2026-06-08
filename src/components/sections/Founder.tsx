@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useGsapTextReveal, useGsapClipReveal } from '../../hooks/useGsapEffects'
-import founderImage from '../../assets/images/founder.png'
+import leadershipImage from '../../assets/images/founder-portrait.png'
 
 export function Founder() {
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -10,8 +10,10 @@ export function Founder() {
     offset: ['start end', 'end start'],
   })
 
-  const imageScale = useTransform(scrollYProgress, [0, 0.5], [0.9, 1])
-  const imageRotate = useTransform(scrollYProgress, [0, 0.5], [-3, 0])
+  // 4.11 Parallax and scale motion transforms
+  const imageScale = useTransform(scrollYProgress, [0, 0.5], [0.95, 1])
+  const imageRotate = useTransform(scrollYProgress, [0, 0.5], [-2, 0])
+  const imageY = useTransform(scrollYProgress, [0, 1], [30, -30])
 
   const titleRef = useGsapTextReveal({ scrub: 1, stagger: 0.03 })
   const imageRef = useGsapClipReveal('right')
@@ -20,33 +22,35 @@ export function Founder() {
     <section
       ref={sectionRef}
       id="fundadora"
-      className="relative py-24 md:py-36 overflow-hidden"
+      className="relative py-24 md:py-36 overflow-hidden bg-neutral-50/30"
     >
       {/* Subtle background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-50/50 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-neutral-100/40 to-transparent" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          {/* Left: Image */}
+          {/* Left: Founder Portrait (Full bleed card) */}
           <div
             ref={imageRef as React.RefObject<HTMLDivElement>}
             className="lg:col-span-5 order-1"
           >
             <motion.div
-              style={{ scale: imageScale, rotate: imageRotate }}
+              style={{ scale: imageScale, rotate: imageRotate, y: imageY }}
               className="relative max-w-md mx-auto lg:max-w-none"
             >
               {/* Background glow circle */}
               <div className="absolute -inset-8 bg-gradient-to-br from-accent/10 via-primary-light/5 to-transparent rounded-full blur-3xl" />
 
-              <div className="relative overflow-hidden rounded-[2rem]">
+              {/* 4.10 Full-bleed photograph card */}
+              <div className="relative overflow-hidden rounded-[2.5rem] border border-neutral-200/40 shadow-2xl aspect-[3/4] bg-neutral-900 group">
                 <img
-                  src={founderImage}
-                  alt="Inelvis Maytin — Fundadora de FCIG"
-                  className="w-full object-cover aspect-[3/4] rounded-[2rem]"
+                  src={leadershipImage}
+                  alt="Liderazgo Damaris Escalante & Christian"
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/40 via-transparent to-transparent rounded-[2rem]" />
+                {/* Subtle dark gradient mask for text contrast */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-black/0 to-transparent" />
               </div>
 
               {/* Availability badge */}
@@ -64,10 +68,10 @@ export function Founder() {
                   </div>
                   <div>
                     <p className="text-sm font-semibold text-primary">
-                      Disponible para consultas
+                      Disponible para asesoría
                     </p>
                     <p className="text-xs text-neutral-500 font-medium">
-                      Respuesta en menos de 24h
+                      Respuesta en menos de 5 minutos
                     </p>
                   </div>
                 </div>
@@ -91,7 +95,7 @@ export function Founder() {
               ref={titleRef as React.RefObject<HTMLHeadingElement>}
               className="text-4xl md:text-5xl font-serif font-bold text-primary mb-2 leading-[1.1]"
             >
-              Conoce a Inelvis
+              Nuestro Liderazgo
             </h2>
 
             <motion.p
@@ -101,7 +105,7 @@ export function Founder() {
               transition={{ delay: 0.2 }}
               className="text-accent font-semibold text-sm tracking-wider uppercase mb-8"
             >
-              Fundadora & Agente Principal
+              Damaris Escalante & Christian
             </motion.p>
 
             <motion.div
@@ -109,28 +113,29 @@ export function Founder() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="space-y-4 text-neutral-700 leading-relaxed mb-10"
+              className="space-y-4 text-neutral-700 leading-relaxed mb-10 text-base md:text-lg"
             >
               <p>
-                Inelvis no es solo la fundadora de FCIG. Es la persona que se
-                sienta contigo a explicarte tu póliza como si le estuviera
-                explicando a alguien de su propia familia. Creó esta agencia
-                porque cree que nadie debería sentirse perdido al elegir un
-                seguro. Su promesa: que entiendas todo antes de firmar.
+                En Christian Brokerage, creemos que un servicio excepcional requiere personas comprometidas. Damaris Escalante, nuestra Coordinadora de Servicios y Especialista en Migración, lidera la atención al cliente y la optimización digital mediante CRM, asegurando respuestas casi inmediatas.
+              </p>
+              <p>
+                Junto con Christian, especialista certificado y Enrolled Agent ante el IRS, dirigimos un equipo calificado enfocado en simplificar y coordinar tus seguros, tus impuestos federales y estatales, y tus trámites migratorios con la máxima rigurosidad técnica.
               </p>
             </motion.div>
 
-            {/* Quote */}
+            {/* 4.12 Quote with huge transparent icon */}
             <motion.blockquote
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="relative pl-6 border-l-[3px] border-accent mb-10"
+              className="relative pl-8 border-l-[3px] border-accent mb-10 overflow-visible"
             >
-              <p className="text-lg font-serif italic text-primary/80 leading-relaxed">
-                "Si no lo entiendes, no lo firmes. Mi trabajo es que todo
-                quede claro antes de dar el primer paso."
+              <span className="absolute -left-2 -top-12 text-[10rem] font-serif font-black text-accent/5 pointer-events-none select-none">
+                “
+              </span>
+              <p className="relative z-10 text-lg font-serif italic text-primary/80 leading-relaxed">
+                "Nuestra prioridad es que cada cliente encuentre un camino claro en su idioma, respaldado por la tecnología y un trato humano excepcional."
               </p>
             </motion.blockquote>
 
@@ -143,13 +148,13 @@ export function Founder() {
               className="flex flex-wrap gap-3"
             >
               {[
-                { label: 'FL & TX', sub: 'Licencia Activa' },
-                { label: '100%', sub: 'Habla Tu Idioma' },
-                { label: '★★★★★', sub: 'Trato Familiar' },
+                { label: '50 Estados', sub: 'Cobertura Nacional' },
+                { label: '100% en Español', sub: 'Asesoría Bilingüe' },
+                { label: 'IRS EA', sub: 'Enrolled Agents' },
               ].map((cred) => (
                 <div
                   key={cred.sub}
-                  className="px-4 py-2.5 rounded-xl bg-neutral-50 border border-neutral-200/60"
+                  className="px-4 py-2.5 rounded-xl bg-white border border-neutral-200/50 shadow-sm"
                 >
                   <p className="text-sm font-bold text-primary">{cred.label}</p>
                   <p className="text-xs text-neutral-500 font-medium">{cred.sub}</p>

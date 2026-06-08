@@ -1,42 +1,57 @@
+import { useEffect } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
-import { ScrollProgress } from './components/ui/ScrollProgress'
-import { CustomCursor } from './components/ui/CustomCursor'
+import { MetaPixel } from './components/integrations/MetaPixel'
 import { Navbar } from './components/sections/Navbar'
-import { Hero } from './components/sections/Hero'
-import { MarqueeBand } from './components/ui/MarqueeBand'
-import { Services } from './components/sections/Services'
-import { Storytelling } from './components/sections/Storytelling'
-import { WaveDivider } from './components/ui/WaveDivider'
-import { Values } from './components/sections/Values'
-import { Founder } from './components/sections/Founder'
-import { ContactSection } from './components/sections/CTA'
 import { Footer } from './components/sections/Footer'
+import { ScrollProgress } from './components/ui/ScrollProgress'
+import { ScrollToTop } from './components/ui/ScrollToTop'
+import { VariantSwitcher } from './components/ui/VariantSwitcher'
 import { WhatsAppButton } from './components/ui/WhatsAppButton'
 
 function App() {
   useSmoothScroll()
+  const { pathname } = useLocation()
+
+  useEffect(() => {
+    const titles: Record<string, string> = {
+      '/': 'Christian Brokerage | Seguros, Taxes e Inmigración en Nueva York',
+      '/seguros': 'Seguros Generales y Comerciales | Christian Brokerage',
+      '/taxes': 'Taxes e Impuestos Certificados | Christian Brokerage',
+      '/inmigracion': 'Acompañamiento y Trámites Migratorios | Christian Brokerage',
+    }
+
+    const descriptions: Record<string, string> = {
+      '/': 'Asesoría bilingüe en seguros, taxes e inmigración desde una oficina local en Nueva York.',
+      '/seguros': 'Cotiza seguro de auto, TLC, negocio, casa, vida y más con asesoría clara en español.',
+      '/taxes': 'Preparación de taxes personales y comerciales, ITIN y representación ante el IRS.',
+      '/inmigracion': 'Soporte administrativo para trámites migratorios, traducciones certificadas y organización documental.',
+    }
+
+    document.title = titles[pathname] || 'Christian Brokerage | Seguros, Taxes e Inmigración'
+
+    let metaDesc = document.querySelector('meta[name="description"]')
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta')
+      metaDesc.setAttribute('name', 'description')
+      document.head.appendChild(metaDesc)
+    }
+    metaDesc.setAttribute('content', descriptions[pathname] || descriptions['/'])
+  }, [pathname])
 
   return (
-    <div className="relative cursor-none lg:cursor-none">
+    <div className="relative">
       <div className="global-noise" aria-hidden="true" />
-      <CustomCursor />
+      <MetaPixel />
       <ScrollProgress />
+      <ScrollToTop />
       <Navbar />
       <main>
-        <Hero />
-        <MarqueeBand variant="dark" speed={35} />
-        <Services />
-        <WaveDivider from="#0A1628" to="#081a2e" variant="wave" />
-        <Storytelling />
-        <WaveDivider from="#061629" to="#0a2540" variant="wave" flip />
-        <Values />
-        <WaveDivider from="#0a2540" to="#ffffff" variant="curve" flip />
-        <Founder />
-        <MarqueeBand variant="light" speed={30} />
-        <ContactSection />
+        <Outlet />
       </main>
       <Footer />
       <WhatsAppButton />
+      <VariantSwitcher />
     </div>
   )
 }

@@ -3,6 +3,9 @@ import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
+type LenisInstance = InstanceType<typeof Lenis>
+type LenisWindow = Window & { __lenis?: LenisInstance }
+
 gsap.registerPlugin(ScrollTrigger)
 
 export function useSmoothScroll() {
@@ -22,9 +25,7 @@ export function useSmoothScroll() {
 
     gsap.ticker.add(toggleTicker)
     gsap.ticker.lagSmoothing(0)
-
-    // Make lenis available globally for scroll-to functionality
-    ;(window as unknown as Record<string, unknown>).__lenis = lenis
+    ;(window as LenisWindow).__lenis = lenis
 
     const handleLoad = () => ScrollTrigger.refresh()
     window.addEventListener('load', handleLoad)
@@ -33,33 +34,27 @@ export function useSmoothScroll() {
       window.removeEventListener('load', handleLoad)
       gsap.ticker.remove(toggleTicker)
       lenis.destroy()
+      delete (window as LenisWindow).__lenis
     }
   }, [])
 }
 
 export function scrollTo(target: string | number | HTMLElement) {
-  const lenis = (window as unknown as Record<string, unknown>).__lenis as any
+  const lenis = (window as LenisWindow).__lenis
   if (!lenis) return
 
-  // Si intentamos hacer scroll a un ID, verificar si GSAP ScrollTrigger administra esa sección.
-  // Esto previene que el ancla baje hasta el final del carrusel por los pin-spacers.
   if (typeof target === 'string' && target.startsWith('#')) {
     const id = target.substring(1)
-    
-    // We already imported ScrollTrigger at the top of the file
-    if (ScrollTrigger) {
-      const scrollTriggers = ScrollTrigger.getAll()
-      // Encontrar el trigger cuyo elemento principal coincida con nuestro ID
-      const st = scrollTriggers.find((t: any) => t.trigger && t.trigger.id === id)
-      
-      if (st && st.start !== undefined) {
-        // Encontramos el anclaje exacto en el espacio de GSAP
-        lenis.scrollTo(st.start - 80)
-        return
-      }
+    const scrollTrigger = ScrollTrigger.getAll().find((trigger) => {
+      const triggerElement = trigger.trigger
+      return triggerElement instanceof HTMLElement && triggerElement.id === id
+    })
+
+    if (scrollTrigger?.start !== undefined) {
+      lenis.scrollTo(scrollTrigger.start - 80)
+      return
     }
   }
 
-  // Fallback a Lenis nativo
   lenis.scrollTo(target, { offset: -80 })
 }

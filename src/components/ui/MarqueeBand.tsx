@@ -1,4 +1,5 @@
-import { ShieldCheck, Users, Clock, Star, MapPin, Phone } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+import { Clock, MapPin, Phone, Shield, ShieldCheck, Star, Users } from 'lucide-react'
 
 interface MarqueeBandProps {
   variant?: 'light' | 'dark'
@@ -6,15 +7,32 @@ interface MarqueeBandProps {
   className?: string
 }
 
-const trustItems = [
-  { icon: ShieldCheck, text: 'Licencia Activa en FL y TX' },
-  { icon: Users, text: '+500 Familias Ya Confían' },
-  { icon: Clock, text: 'Tu Cotización en 5 Minutos' },
-  { icon: Star, text: 'Te Atendemos en Tu Idioma' },
-  { icon: MapPin, text: 'Presentes en Florida y Texas' },
-  { icon: Phone, text: 'Trato Cercano y Personal' },
-  { icon: ShieldCheck, text: 'Auto • Hogar • Negocio • Salud' },
-  { icon: Star, text: 'Sin Compromiso, Sin Presión' },
+interface MarqueeItem {
+  icon?: LucideIcon
+  text: string
+  style?: string
+}
+
+const trustItems: MarqueeItem[] = [
+  { icon: ShieldCheck, text: 'IRS Enrolled Agents certificados' },
+  { icon: Users, text: 'Asistencia integral en NY y EE.UU.' },
+  { icon: Clock, text: 'Respuesta humana y seguimiento' },
+  { icon: Star, text: 'Asesoría 100% en tu idioma' },
+  { icon: MapPin, text: 'Oficina en Washington Heights' },
+  { icon: ShieldCheck, text: 'Seguros • Taxes • Inmigración' },
+  { icon: Star, text: 'Peticiones • Notaría • Traducciones' },
+  { icon: Phone, text: 'Tu tranquilidad, nuestro compromiso' },
+]
+
+const carrierItems: MarqueeItem[] = [
+  { icon: Shield, text: 'Progressive', style: 'font-sans font-black italic tracking-tight' },
+  { icon: Shield, text: 'Allstate', style: 'font-serif font-semibold tracking-wider' },
+  { icon: Shield, text: 'Kemper', style: 'font-sans tracking-tight font-extrabold uppercase' },
+  { icon: Shield, text: 'Liberty Mutual', style: 'font-serif font-black italic' },
+  { icon: Shield, text: 'Travelers', style: 'font-sans font-bold tracking-widest uppercase' },
+  { icon: Shield, text: 'National General', style: 'font-sans tracking-wide uppercase font-semibold' },
+  { icon: Shield, text: 'Foremost', style: 'font-serif italic font-medium' },
+  { icon: Shield, text: 'Chubb', style: 'font-sans tracking-widest font-black uppercase' },
 ]
 
 function MarqueeRow({
@@ -24,7 +42,7 @@ function MarqueeRow({
   isDark = true,
   dimmed = false,
 }: {
-  items: typeof trustItems
+  items: MarqueeItem[]
   reverse?: boolean
   speed?: number
   isDark?: boolean
@@ -34,37 +52,29 @@ function MarqueeRow({
 
   return (
     <div className="overflow-hidden whitespace-nowrap">
-      <div
-        className={`inline-flex ${reverse ? 'marquee-reverse' : 'marquee-forward'}`}
-        style={{ animationDuration: duration }}
-      >
-        {/* Duplicate items for seamless loop */}
-        {[...items, ...items].map((item, i) => (
-          <div
-            key={`${item.text}-${i}`}
-            className="inline-flex items-center gap-2.5 mx-8 md:mx-12 flex-shrink-0"
-          >
-            <item.icon
-              size={16}
-              className={isDark ? (dimmed ? 'text-primary-lighter' : 'text-accent') : (dimmed ? 'text-primary-light' : 'text-accent-dark')}
-              strokeWidth={2.5}
-            />
-            <span
-              className={`text-sm md:text-base ${dimmed ? 'font-medium' : 'font-semibold'} tracking-wide whitespace-nowrap ${
-                isDark
-                  ? dimmed ? 'text-white/50' : 'text-white/80'
-                  : dimmed ? 'text-primary/50' : 'text-primary/70'
-              }`}
-            >
-              {item.text}
-            </span>
-            <span
-              className={`text-lg ${isDark ? (dimmed ? 'text-white/10' : 'text-white/20') : (dimmed ? 'text-primary/10' : 'text-primary/15')}`}
-            >
-              {dimmed ? '◆' : '✦'}
-            </span>
-          </div>
-        ))}
+      <div className={`inline-flex ${reverse ? 'marquee-reverse' : 'marquee-forward'}`} style={{ animationDuration: duration }}>
+        {[...items, ...items].map((item, index) => {
+          const Icon = item.icon || Star
+          return (
+            <div key={`${item.text}-${index}`} className="mx-8 inline-flex shrink-0 items-center gap-2.5 md:mx-12">
+              <Icon
+                size={15}
+                className={isDark ? (dimmed ? 'text-primary-light/60' : 'text-accent') : dimmed ? 'text-primary-light/60' : 'text-accent-dark'}
+                strokeWidth={2.5}
+              />
+              <span
+                className={`whitespace-nowrap text-sm md:text-base ${item.style || (dimmed ? 'font-medium' : 'font-semibold')} tracking-wide ${
+                  isDark ? (dimmed ? 'text-white/40' : 'text-white/80') : dimmed ? 'text-primary/45' : 'text-primary/70'
+                }`}
+              >
+                {item.text}
+              </span>
+              <span className={`text-lg ${isDark ? (dimmed ? 'text-white/10' : 'text-white/20') : dimmed ? 'text-primary/10' : 'text-primary/15'}`}>
+                {dimmed ? '◆' : '✦'}
+              </span>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
@@ -75,56 +85,21 @@ export function MarqueeBand({ variant = 'dark', speed = 40, className = '' }: Ma
 
   return (
     <div
-      className={`relative overflow-hidden ${className}`}
+      className={`marquee-container relative overflow-hidden ${className}`}
       style={{
         background: isDark
           ? 'linear-gradient(135deg, #0a2540 0%, #0d2f4f 100%)'
-          : 'linear-gradient(135deg, #f0f4f8 0%, #e8f4ec 100%)',
+          : 'linear-gradient(135deg, #fbf8f1 0%, #f4efe5 100%)',
       }}
     >
-      {/* Noise overlay */}
-      <div className="noise-overlay absolute inset-0 pointer-events-none" />
-
-      {/* Top edge line */}
-      <div
-        className="absolute top-0 left-0 right-0 h-px"
-        style={{
-          background: isDark
-            ? 'linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent)'
-            : 'linear-gradient(90deg, transparent, rgba(10,37,64,0.1), transparent)',
-        }}
-      />
-
-      {/* Row 1 — left to right */}
+      <div className="absolute inset-x-0 top-0 h-px bg-accent/25" />
       <div className="py-4 md:py-5">
         <MarqueeRow items={trustItems} speed={speed} isDark={isDark} />
       </div>
-
-      {/* Row 2 — right to left */}
-      <div
-        className="py-4 md:py-5 border-t"
-        style={{
-          borderColor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(10,37,64,0.05)',
-        }}
-      >
-        <MarqueeRow
-          items={[...trustItems].reverse()}
-          reverse
-          speed={speed * 0.8}
-          isDark={isDark}
-          dimmed
-        />
+      <div className="border-t border-primary/10 py-4 md:py-5">
+        <MarqueeRow items={carrierItems} reverse speed={speed * 0.9} isDark={isDark} dimmed />
       </div>
-
-      {/* Bottom edge line */}
-      <div
-        className="absolute bottom-0 left-0 right-0 h-px"
-        style={{
-          background: isDark
-            ? 'linear-gradient(90deg, transparent, rgba(16,185,129,0.3), transparent)'
-            : 'linear-gradient(90deg, transparent, rgba(10,37,64,0.1), transparent)',
-        }}
-      />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-accent/25" />
     </div>
   )
 }
