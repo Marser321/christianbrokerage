@@ -1,21 +1,8 @@
 import { Clock, Mail, MapPin, Phone } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { ThemedLogo } from '../ui/ThemedLogo'
+import { footerCompanyLinks, footerServiceLinks } from '../../data/navigationCatalog'
 import { officePhoneDisplay, officePhoneHref } from '../../data/serviceCatalog'
-
-const footerLinks = {
-  servicios: [
-    { label: 'Seguros', href: '/seguros' },
-    { label: 'Taxes', href: '/taxes' },
-    { label: 'Inmigración', href: '/inmigracion' },
-    { label: 'Traducciones y notaría', href: '/inmigracion#traducciones' },
-  ],
-  empresa: [
-    { label: 'Nosotros', href: '/#nosotros' },
-    { label: 'Proceso', href: '/#valores' },
-    { label: 'Contacto', href: '/#contacto' },
-  ],
-}
 
 export function Footer() {
   const currentYear = new Date().getFullYear()
@@ -34,7 +21,7 @@ export function Footer() {
           <div>
             <h2 className="font-sans text-sm font-semibold uppercase text-accent">Servicios</h2>
             <ul className="mt-5 space-y-3">
-              {footerLinks.servicios.map((link) => (
+              {footerServiceLinks.map((link) => (
                 <li key={link.label}>
                   <Link to={link.href} className="text-sm text-white/70 transition hover:text-accent">
                     {link.label}
@@ -47,7 +34,7 @@ export function Footer() {
           <div>
             <h2 className="font-sans text-sm font-semibold uppercase text-accent">Empresa</h2>
             <ul className="mt-5 space-y-3">
-              {footerLinks.empresa.map((link) => (
+              {footerCompanyLinks.map((link) => (
                 <li key={link.label}>
                   <Link to={link.href} className="text-sm text-white/70 transition hover:text-accent">
                     {link.label}
@@ -61,11 +48,11 @@ export function Footer() {
             <h2 className="font-sans text-sm font-semibold uppercase text-accent">Contacto</h2>
             <div className="mt-5 space-y-4 text-sm text-white/70">
               <a href={officePhoneHref} className="flex items-center gap-3 transition hover:text-accent">
-                <Phone size={15} className="shrink-0" />
+                <Phone size={15} className="shrink-0" aria-hidden="true" />
                 {officePhoneDisplay}
               </a>
               <a href="mailto:christianbrokerage@hotmail.com" className="flex items-center gap-3 transition hover:text-accent">
-                <Mail size={15} className="shrink-0" />
+                <Mail size={15} className="shrink-0" aria-hidden="true" />
                 christianbrokerage@hotmail.com
               </a>
               <a
@@ -74,7 +61,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="flex items-start gap-3 transition hover:text-accent"
               >
-                <MapPin size={15} className="mt-0.5 shrink-0" />
+                <MapPin size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
                 <span>
                   501 W 161st St
                   <br />
@@ -82,7 +69,7 @@ export function Footer() {
                 </span>
               </a>
               <div className="flex items-start gap-3 border-t border-white/10 pt-4">
-                <Clock size={15} className="mt-0.5 shrink-0" />
+                <Clock size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
                 <span>
                   Lun-Vie: 9 AM - 6 PM
                   <br />

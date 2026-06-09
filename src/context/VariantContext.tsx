@@ -31,11 +31,11 @@ function densityFromLabel(label: string | undefined): Density {
   return 'rich'
 }
 
-export function encodeVariant(theme: Theme, density: Density): string {
+function encodeVariant(theme: Theme, density: Density): string {
   return `${theme === 'dark' ? 'oscuro' : 'claro'}-${densityLabel(density)}`
 }
 
-export function decodeVariant(raw: string | null | undefined): { theme: Theme; density: Density } | null {
+function decodeVariant(raw: string | null | undefined): { theme: Theme; density: Density } | null {
   if (!raw) return null
   const [t, d] = raw.split('-')
   if (!t) return null
@@ -61,7 +61,7 @@ function readInitial(): { theme: Theme; density: Density } {
 const VariantContext = createContext<VariantState | null>(null)
 
 export function VariantProvider({ children }: { children: ReactNode }) {
-  const initial = useMemo(readInitial, [])
+  const initial = useMemo(() => readInitial(), [])
   const [theme, setThemeState] = useState<Theme>(initial.theme)
   const [density, setDensityState] = useState<Density>(initial.density)
 

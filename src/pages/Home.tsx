@@ -2,7 +2,8 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Building2, CalendarDays, CheckCircle2, MessageCircle, Phone } from 'lucide-react'
 import { Hero } from '../components/sections/Hero'
 import { useVariant } from '../context/VariantContext'
-import { mainCardImage } from '../data/imageLibrary'
+import { mainCardFramePos, mainCardImage, realPhotoFramePos } from '../data/imageLibrary'
+import { homeServicePreviewCount, serviceHref } from '../data/navigationCatalog'
 import damarisCertificates from '../assets/images/real/damaris-certificates.jpg'
 import damarisOfficeWhite from '../assets/images/real/damaris-office-white.jpg'
 import {
@@ -42,7 +43,7 @@ function HomeServices() {
                 alt=""
                 aria-hidden="true"
                 loading="lazy"
-                className="h-56 w-full object-cover object-[center_22%]"
+                className={`h-56 w-full object-cover ${mainCardFramePos(vertical.slug, density)}`}
               />
               <div
                 className="editorial-bg relative flex flex-1 flex-col overflow-hidden"
@@ -57,10 +58,15 @@ function HomeServices() {
                   <h3 className="font-sans text-2xl font-semibold leading-tight text-heading">{vertical.title}</h3>
                   <p className="mt-4 text-sm leading-7 text-muted">{vertical.highlight}</p>
                   <ul className="mt-6 space-y-3">
-                    {vertical.services.slice(0, 4).map((service) => (
-                      <li key={service.id} className="flex gap-3 text-sm leading-6 text-body">
-                        <CheckCircle2 className="mt-0.5 shrink-0 text-accent" size={16} />
-                        <span>{service.title}</span>
+                    {vertical.services.slice(0, homeServicePreviewCount).map((service) => (
+                      <li key={service.id}>
+                        <Link
+                          to={serviceHref(vertical.slug, service.id)}
+                          className="group flex gap-3 rounded-md text-sm leading-6 text-body transition hover:text-heading focus-visible:bg-surface-2 focus-visible:px-2 focus-visible:py-1"
+                        >
+                          <CheckCircle2 className="mt-0.5 shrink-0 text-accent" size={16} aria-hidden="true" />
+                          <span className="underline-offset-4 group-hover:underline">{service.title}</span>
+                        </Link>
                       </li>
                     ))}
                   </ul>
@@ -69,7 +75,7 @@ function HomeServices() {
                     className="mt-auto inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
                     Explorar {vertical.slug === 'inmigracion' ? 'inmigración' : vertical.slug}
-                    <ArrowRight size={16} />
+                    <ArrowRight size={16} aria-hidden="true" />
                   </Link>
                 </div>
               </div>
@@ -112,7 +118,7 @@ function OfficeProof() {
             <img
               src={damarisCertificates}
               alt="Certificaciones y credenciales fiscales de Christian Brokerage"
-              className="aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)]"
+              className={`aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)] ${realPhotoFramePos('home-certificates')}`}
               loading="lazy"
             />
             <figcaption className="mt-3 text-sm leading-6 text-muted">Certificaciones visibles y proceso documentado.</figcaption>
@@ -121,7 +127,7 @@ function OfficeProof() {
             <img
               src={damarisOfficeWhite}
               alt="Atención en oficina de Christian Brokerage"
-              className="aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)]"
+              className={`aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)] ${realPhotoFramePos('home-office')}`}
               loading="lazy"
             />
             <figcaption className="mt-3 text-sm leading-6 text-muted">Atención presencial para revisar documentos con calma.</figcaption>

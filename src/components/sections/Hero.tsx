@@ -2,6 +2,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Award, MapPin, MessageCircle, ShieldCheck } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import damarisDeskBlue from '../../assets/images/real/damaris-desk-blue.jpg'
+import { realPhotoFramePos } from '../../data/imageLibrary'
 import { createWhatsappHref } from '../../data/serviceCatalog'
 
 const proofPoints = [
@@ -77,8 +78,9 @@ export function Hero() {
             <img
               src={damarisDeskBlue}
               alt="Damaris de Christian Brokerage atendiendo desde la oficina"
-              className="aspect-[4/5] w-full object-cover"
+              className={`aspect-[4/5] w-full object-cover ${realPhotoFramePos('home-hero')}`}
               loading="eager"
+              fetchPriority="high"
             />
           </div>
           <figcaption className="mt-4 text-sm leading-6 text-muted">

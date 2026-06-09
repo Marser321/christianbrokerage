@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { CheckCircle2 } from 'lucide-react'
+import { useSearchParams } from 'react-router-dom'
 import type { ServiceItem, ServiceVertical } from '../../data/serviceCatalog'
 import { useVariant } from '../../context/VariantContext'
-import { verticalImage } from '../../data/imageLibrary'
+import { verticalFramePos, verticalImage } from '../../data/imageLibrary'
 import { BookingBlock } from './BookingBlock'
 import { ServiceCardGrid } from './ServiceCardGrid'
 import { ServiceDrawer } from './ServiceDrawer'
@@ -14,14 +15,36 @@ type ServicePageProps = {
 }
 
 export function ServicePage({ vertical }: ServicePageProps) {
-  const [activeService, setActiveService] = useState<ServiceItem | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
   const { density } = useVariant()
+  const serviceId = searchParams.get('servicio')
+  const activeService = serviceId ? vertical.services.find((item) => item.id === serviceId) ?? null : null
+
+  useEffect(() => {
+    if (!serviceId || activeService) return
+
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.delete('servicio')
+    setSearchParams(nextParams, { replace: true })
+  }, [activeService, searchParams, serviceId, setSearchParams])
+
+  const openService = (service: ServiceItem) => {
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.set('servicio', service.id)
+    setSearchParams(nextParams)
+  }
+
+  const closeService = () => {
+    const nextParams = new URLSearchParams(searchParams)
+    nextParams.delete('servicio')
+    setSearchParams(nextParams, { replace: true })
+  }
 
   return (
     <div className={`service-page service-page-${vertical.slug} bg-surface text-body`}>
       <ServiceHero vertical={vertical} />
       <TrustBand items={vertical.trust} />
-      <ServiceCardGrid vertical={vertical} onOpen={setActiveService} />
+      <ServiceCardGrid vertical={vertical} onOpen={openService} />
 
       <section className="bg-surface py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 sm:px-6 lg:grid-cols-12 lg:px-8">
@@ -36,7 +59,7 @@ export function ServicePage({ vertical }: ServicePageProps) {
                 alt=""
                 aria-hidden="true"
                 loading="lazy"
-                className="aspect-[5/4] w-full object-cover object-[center_25%]"
+                className={`aspect-[5/4] w-full object-cover ${verticalFramePos(vertical.slug, density)}`}
               />
             </figure>
           </div>
@@ -60,7 +83,7 @@ export function ServicePage({ vertical }: ServicePageProps) {
       </section>
 
       <BookingBlock vertical={vertical} />
-      <ServiceDrawer service={activeService} vertical={vertical} onClose={() => setActiveService(null)} />
+      <ServiceDrawer service={activeService} vertical={vertical} onClose={closeService} />
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, MessageCircle } from 'lucide-react'
+import { realPhotoFramePos } from '../../data/imageLibrary'
 import type { ServiceVertical } from '../../data/serviceCatalog'
 import { createWhatsappHref } from '../../data/serviceCatalog'
 
@@ -70,8 +71,9 @@ export function ServiceHero({ vertical }: ServiceHeroProps) {
             <img
               src={vertical.visual.src}
               alt={vertical.visual.alt}
-              className="aspect-[4/5] w-full object-cover"
+              className={`aspect-[4/5] w-full object-cover ${realPhotoFramePos(`service-${vertical.slug}`)}`}
               loading="eager"
+              fetchPriority="high"
             />
           </div>
           <figcaption className="mt-4 max-w-md text-sm leading-6 text-muted">
