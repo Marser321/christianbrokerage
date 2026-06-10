@@ -61,8 +61,13 @@ export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
                       {service.turnaround}
                     </span>
                   </div>
-                  <h3 className="mt-auto max-w-[78%] font-sans text-lg font-semibold leading-tight text-heading">
+                  <h3 className="mt-auto flex max-w-[82%] items-center gap-1.5 font-sans text-lg font-semibold leading-tight text-heading">
                     {service.title}
+                    <ArrowRight
+                      size={16}
+                      aria-hidden="true"
+                      className="shrink-0 -translate-x-1 text-accent opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                    />
                   </h3>
                 </div>
               </div>
@@ -99,9 +104,12 @@ export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Consultar ${service.title} por WhatsApp`}
-                      className="inline-flex min-h-11 items-center justify-center rounded-md border border-line px-4 py-2.5 text-heading transition hover:border-[#25D366]/50 hover:text-[#128C7E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                      className="group/wa relative inline-flex min-h-11 items-center justify-center rounded-md border border-line px-4 py-2.5 text-heading transition hover:border-[#25D366]/50 hover:text-[#128C7E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <MessageCircle size={17} />
+                      <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-line bg-surface-card px-2.5 py-1 text-xs font-semibold text-heading opacity-0 shadow-lg transition-opacity duration-200 group-hover/wa:opacity-100">
+                        Consultar por WhatsApp
+                      </span>
                     </a>
                   </div>
                 </div>

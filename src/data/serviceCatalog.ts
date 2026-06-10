@@ -20,9 +20,9 @@ import {
   ShieldCheck,
   Users,
 } from 'lucide-react'
-import damarisCertificates from '../assets/images/real/damaris-certificates.jpg'
-import damarisDeskBlue from '../assets/images/real/damaris-desk-blue.jpg'
-import damarisOfficeWhite from '../assets/images/real/damaris-office-white.jpg'
+import damarisCoralDesk from '../assets/images/real/damaris-coral-desk.jpg'
+import damarisGrayBook from '../assets/images/real/damaris-gray-book.jpg'
+import damarisWhiteBook from '../assets/images/real/damaris-white-book.jpg'
 
 export type ServiceSlug = 'seguros' | 'taxes' | 'inmigracion'
 
@@ -499,8 +499,8 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     bookingTitle: 'Agenda una llamada para cotizar seguro',
     bookingCopy: 'Usa el calendario si está disponible o escríbenos por WhatsApp. Si tu caso es TLC, negocio o cierre de propiedad, incluye fecha límite y documentos disponibles.',
     visual: {
-      src: damarisDeskBlue,
-      alt: 'Especialista de Christian Brokerage trabajando en oficina',
+      src: damarisCoralDesk,
+      alt: 'Damaris Gloder de Christian Brokerage atendiendo en su oficina',
       caption: 'Cotizaciones y certificados gestionados desde una oficina local, con seguimiento humano.',
     },
     trust: [
@@ -531,9 +531,9 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     bookingTitle: 'Programa una revisión fiscal',
     bookingCopy: 'Ten a mano cartas del IRS, W-2, 1099, declaraciones previas o documentos de empresa. Si es ITIN, menciona si es solicitud nueva o renovación.',
     visual: {
-      src: damarisCertificates,
-      alt: 'Certificaciones y documentos fiscales de Christian Brokerage',
-      caption: 'Autoridad fiscal visible: certificaciones, oficina y procesos documentados.',
+      src: damarisGrayBook,
+      alt: 'Damaris Gloder, Enrolled Agent de Christian Brokerage, revisando educación financiera',
+      caption: 'Planeación fiscal con criterio: declaraciones, ITIN y representación ante el IRS.',
     },
     trust: [
       { icon: Award, title: 'IRS Acceptance Agent', desc: 'Proceso ITIN con certificación documental cuando aplica.' },
@@ -563,8 +563,8 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     bookingTitle: 'Reserva una orientación documental',
     bookingCopy: 'La llamada sirve para ordenar documentos, tiempos y próximos pasos administrativos. Para asesoría legal, te indicaremos cuándo corresponde consultar a un abogado.',
     visual: {
-      src: damarisOfficeWhite,
-      alt: 'Atención en oficina de Christian Brokerage',
+      src: damarisWhiteBook,
+      alt: 'Damaris Gloder de Christian Brokerage en atención al cliente',
       caption: 'Acompañamiento presencial y bilingüe para expedientes que requieren cuidado.',
     },
     trust: [

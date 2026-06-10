@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
 import { ArrowRight, Building2, CalendarDays, CheckCircle2, MessageCircle, Phone } from 'lucide-react'
 import { Hero } from '../components/sections/Hero'
+import { NumberTicker } from '../components/ui/NumberTicker'
+import { fadeUp, staggerContainer, staggerItem, viewportOnce } from '../lib/motion'
 import { useVariant } from '../context/VariantContext'
 import { mainCardFramePos, mainCardImage, realPhotoFramePos } from '../data/imageLibrary'
 import { homeServicePreviewCount, serviceHref } from '../data/navigationCatalog'
-import damarisCertificates from '../assets/images/real/damaris-certificates.jpg'
-import damarisOfficeWhite from '../assets/images/real/damaris-office-white.jpg'
+import damarisNavyStanding from '../assets/images/real/damaris-navy-standing.jpg'
+import damarisTanDesk from '../assets/images/real/damaris-tan-desk.jpg'
+import damarisWhiteBook from '../assets/images/real/damaris-white-book.jpg'
 import {
   createWhatsappHref,
   officePhoneDisplay,
@@ -35,9 +39,15 @@ function HomeServices() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="grid grid-cols-1 gap-5 lg:grid-cols-3"
+        >
           {verticals.map((vertical) => (
-            <article key={vertical.slug} className="flex min-h-[430px] flex-col overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_16px_42px_rgba(10,37,64,0.06)]">
+            <motion.article variants={staggerItem} key={vertical.slug} className="flex min-h-[430px] flex-col overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_16px_42px_rgba(10,37,64,0.06)]">
               <img
                 src={mainCardImage(vertical.slug, density)}
                 alt=""
@@ -79,9 +89,9 @@ function HomeServices() {
                   </Link>
                 </div>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -91,7 +101,7 @@ function OfficeProof() {
   return (
     <section id="nosotros" className="bg-surface py-16 md:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 sm:px-6 lg:grid-cols-12 lg:items-center lg:px-8">
-        <div className="lg:col-span-5">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="lg:col-span-5">
           <p className="eyebrow mb-4">Presencia local</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-heading md:text-5xl">
             Una oficina real para procesos que necesitan confianza real.
@@ -111,28 +121,34 @@ function OfficeProof() {
               <p className="mt-1 text-sm leading-6 text-muted">Teléfono, WhatsApp y atención en español.</p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="grid gap-5 lg:col-span-7 md:grid-cols-2">
-          <figure>
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="grid gap-5 lg:col-span-7 md:grid-cols-2"
+        >
+          <motion.figure variants={staggerItem}>
             <img
-              src={damarisCertificates}
-              alt="Certificaciones y credenciales fiscales de Christian Brokerage"
+              src={damarisNavyStanding}
+              alt="Damaris Gloder de pie en su oficina, con diplomas y certificaciones detrás"
               className={`aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)] ${realPhotoFramePos('home-certificates')}`}
               loading="lazy"
             />
             <figcaption className="mt-3 text-sm leading-6 text-muted">Certificaciones visibles y proceso documentado.</figcaption>
-          </figure>
-          <figure className="md:mt-12">
+          </motion.figure>
+          <motion.figure variants={staggerItem} className="md:mt-12">
             <img
-              src={damarisOfficeWhite}
-              alt="Atención en oficina de Christian Brokerage"
+              src={damarisTanDesk}
+              alt="Damaris Gloder en su escritorio de Christian Brokerage"
               className={`aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)] ${realPhotoFramePos('home-office')}`}
               loading="lazy"
             />
             <figcaption className="mt-3 text-sm leading-6 text-muted">Atención presencial para revisar documentos con calma.</figcaption>
-          </figure>
-        </div>
+          </motion.figure>
+        </motion.div>
       </div>
     </section>
   )
@@ -142,14 +158,20 @@ function ProcessBand() {
   return (
     <section id="valores" className="border-y border-line bg-surface-card py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="grid grid-cols-1 gap-8 md:grid-cols-4"
+        >
           {processSteps.map((step, index) => (
-            <div key={step} className="border-l border-line pl-5">
-              <span className="font-serif text-3xl font-semibold text-accent">{index + 1}</span>
+            <motion.div variants={staggerItem} key={step} className="border-l border-line pl-5">
+              <NumberTicker value={index + 1} className="font-serif text-3xl font-semibold text-accent" />
               <p className="mt-3 text-sm leading-7 text-body">{step}</p>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )
@@ -161,7 +183,7 @@ function HomeBooking() {
   return (
     <section id="contacto" className="booking-navy overflow-hidden bg-surface-invert py-16 text-white md:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-5 sm:px-6 lg:grid-cols-12 lg:px-8">
-        <div className="lg:col-span-5">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="lg:col-span-5">
           <p className="eyebrow mb-4 text-accent">Contacto</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-white md:text-5xl">
             Empecemos por ordenar tu caso.
@@ -187,9 +209,28 @@ function HomeBooking() {
               {officePhoneDisplay}
             </a>
           </div>
-        </div>
 
-        <div className="lg:col-span-7">
+          <figure className="mt-8 flex items-center gap-4 border-t border-white/15 pt-6">
+            <img
+              src={damarisWhiteBook}
+              alt="Damaris Gloder, Enrolled Agent de Christian Brokerage"
+              className={`h-20 w-16 shrink-0 rounded-lg border border-white/20 object-cover ${realPhotoFramePos('home-contacto')}`}
+              loading="lazy"
+            />
+            <figcaption className="text-sm leading-6 text-white/75">
+              <span className="block font-semibold text-white">Te atiende Damaris Gloder</span>
+              Enrolled Agent (EA) · atención bilingüe en español.
+            </figcaption>
+          </figure>
+        </motion.div>
+
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="lg:col-span-7"
+        >
           <div className="overflow-hidden rounded-lg border border-white/15 bg-surface-card shadow-[0_28px_70px_rgba(0,0,0,0.26)]">
             {calendarSrc ? (
               <iframe
@@ -220,7 +261,7 @@ function HomeBooking() {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

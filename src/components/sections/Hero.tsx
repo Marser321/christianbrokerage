@@ -1,9 +1,12 @@
 import { motion } from 'framer-motion'
 import { ArrowRight, Award, MapPin, MessageCircle, ShieldCheck } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import damarisDeskBlue from '../../assets/images/real/damaris-desk-blue.jpg'
+import damarisCoralDesk from '../../assets/images/real/damaris-coral-desk.jpg'
 import { realPhotoFramePos } from '../../data/imageLibrary'
 import { createWhatsappHref } from '../../data/serviceCatalog'
+import { staggerContainer, staggerItem, viewportOnce } from '../../lib/motion'
+
+const MotionLink = motion.create(Link)
 
 const proofPoints = [
   { icon: Award, value: 'EA / CAA', label: 'Autoridad IRS e ITIN' },
@@ -57,15 +60,21 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={viewportOnce}
+            className="mt-9 grid grid-cols-1 gap-3 sm:grid-cols-3"
+          >
             {proofPoints.map((point) => (
-              <div key={point.label} className="border-l border-line pl-4">
+              <motion.div variants={staggerItem} key={point.label} className="border-l border-line pl-4">
                 <point.icon className="mb-3 text-accent" size={20} />
                 <p className="font-sans text-lg font-semibold text-heading">{point.value}</p>
                 <p className="mt-1 text-sm leading-6 text-muted">{point.label}</p>
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </motion.div>
 
         <motion.figure
@@ -76,8 +85,8 @@ export function Hero() {
         >
           <div className="overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_28px_70px_rgba(10,37,64,0.16)]">
             <img
-              src={damarisDeskBlue}
-              alt="Damaris de Christian Brokerage atendiendo desde la oficina"
+              src={damarisCoralDesk}
+              alt="Damaris Gloder de Christian Brokerage atendiendo desde la oficina"
               className={`aspect-[4/5] w-full object-cover ${realPhotoFramePos('home-hero')}`}
               loading="eager"
               fetchPriority="high"
@@ -90,13 +99,20 @@ export function Hero() {
       </div>
 
       <div className="relative z-10 mx-auto mt-10 max-w-7xl px-5 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 border-y border-line bg-surface-card/70 md:grid-cols-3">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="grid grid-cols-1 border-y border-line bg-surface-card/70 md:grid-cols-3"
+        >
           {[
             { label: 'Seguros', to: '/seguros', text: 'Cotizaciones, pólizas y certificados para vida diaria y negocio.' },
             { label: 'Taxes', to: '/taxes', text: 'Declaraciones, ITIN, empresas y cartas del IRS.' },
             { label: 'Inmigración', to: '/inmigracion', text: 'Organización documental, traducciones y soporte administrativo.' },
           ].map((item) => (
-            <Link
+            <MotionLink
+              variants={staggerItem}
               key={item.to}
               to={item.to}
               className="group flex min-h-28 flex-col justify-between border-b border-line p-5 transition hover:bg-surface-card md:border-b-0 md:border-r last:md:border-r-0"
@@ -104,9 +120,9 @@ export function Hero() {
               <span className="font-sans text-sm font-semibold text-heading">{item.label}</span>
               <span className="mt-3 text-sm leading-6 text-muted">{item.text}</span>
               <ArrowRight className="mt-4 text-accent transition group-hover:translate-x-1" size={16} />
-            </Link>
+            </MotionLink>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   )

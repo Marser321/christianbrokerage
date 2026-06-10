@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useSmoothScroll } from './hooks/useSmoothScroll'
 import { MetaPixel } from './components/integrations/MetaPixel'
@@ -8,6 +9,8 @@ import { ScrollProgress } from './components/ui/ScrollProgress'
 import { ScrollToTop } from './components/ui/ScrollToTop'
 import { VariantSwitcher } from './components/ui/VariantSwitcher'
 import { WhatsAppButton } from './components/ui/WhatsAppButton'
+import { BackToTop } from './components/ui/BackToTop'
+import { EASE_BRAND } from './lib/motion'
 
 function App() {
   useSmoothScroll()
@@ -46,11 +49,20 @@ function App() {
       <ScrollProgress />
       <ScrollToTop />
       <Navbar />
-      <main>
-        <Outlet />
-      </main>
+      <AnimatePresence mode="wait">
+        <motion.main
+          key={pathname}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.28, ease: EASE_BRAND }}
+        >
+          <Outlet />
+        </motion.main>
+      </AnimatePresence>
       <Footer />
       <WhatsAppButton />
+      <BackToTop />
       <VariantSwitcher />
     </div>
   )

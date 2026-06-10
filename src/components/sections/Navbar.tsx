@@ -5,6 +5,7 @@ import { ArrowRight, ChevronDown, Menu, Phone, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { ThemedLogo } from '../ui/ThemedLogo'
 import { useVariant } from '../../context/VariantContext'
+import { useScrollSpy } from '../../hooks/useScrollSpy'
 import { menuGroupKey, menuImage } from '../../data/imageLibrary'
 import { areaNavGroups, mobileUtilityLinks, simpleNavLinks } from '../../data/navigationCatalog'
 import type { AreaNavGroup, SiteNavLink } from '../../data/navigationCatalog'
@@ -20,6 +21,10 @@ const desktopNavItems: DesktopNavItem[] = [
   ...areaNavGroups.map((area) => ({ type: 'area' as const, item: area })),
   { type: 'simple', item: simpleNavLinks[1]! },
 ]
+
+// Secciones del Home observadas por scroll-spy para mover el indicador activo.
+const HOME_SECTIONS = ['hero', 'servicios', 'nosotros', 'valores', 'contacto']
+const NOSOTROS_SECTIONS = ['nosotros', 'valores', 'contacto']
 
 function splitTarget(to: string) {
   const [pathAndSearch, hash] = to.split('#')
@@ -42,6 +47,8 @@ export function Navbar() {
   const { pathname, hash: currentHash } = useLocation()
   const [openMobileGroup, setOpenMobileGroup] = useState<string | null>(() => areaFromPath(pathname) ?? 'seguros')
   const { density } = useVariant()
+  const isHome = pathname === '/'
+  const activeSection = useScrollSpy(isHome ? HOME_SECTIONS : [])
 
   const activeArea = areaNavGroups.find((area) => area.key === activeDropdown) ?? null
 
@@ -70,6 +77,17 @@ export function Navbar() {
       return pathname === targetPath && currentHash === `#${hash}`
     }
     return pathname === targetPath
+  }
+
+  // En el Home, el indicador activo sigue la sección visible (scroll-spy) para los
+  // enlaces de ancla (Inicio / Nosotros); fuera del Home usa la ruta.
+  const computeActive = (to: string) => {
+    if (isHome && (to === '/#hero' || to.endsWith('#nosotros'))) {
+      const section = activeSection ?? 'hero'
+      if (to === '/#hero') return !NOSOTROS_SECTIONS.includes(section)
+      return NOSOTROS_SECTIONS.includes(section)
+    }
+    return isActive(to)
   }
 
   const toggleMobileMenu = () => {
@@ -114,7 +132,7 @@ export function Navbar() {
 
           <nav className="hidden items-center gap-1 lg:flex" id="navbar-desktop" aria-label="Navegación principal">
             {desktopNavItems.map(({ type, item: navItem }) => {
-              const active = isActive(navItem.to)
+              const active = computeActive(navItem.to)
               const isOpen = type === 'area' && activeDropdown === navItem.key
 
               if (type === 'simple') {
@@ -242,7 +260,10 @@ export function Navbar() {
                   <ArrowRight size={15} aria-hidden="true" />
                 </Link>
               </div>
-              <div className="col-span-8 grid max-h-[500px] grid-cols-2 gap-3 overflow-y-auto p-4">
+              <div
+                className="nav-mega-scroll col-span-8 grid max-h-[calc(100vh-7rem)] grid-cols-2 gap-3 overflow-y-auto p-4"
+                data-lenis-prevent
+              >
                 {activeArea.groups.map((group) => (
                   <section key={group.label} className="rounded-md border border-line bg-surface/78 p-3 backdrop-blur-sm">
                     <h3 className="font-sans text-sm font-semibold leading-tight text-heading">{group.label}</h3>
@@ -281,8 +302,9 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.22 }}
-            className="mx-auto mt-2 max-h-[calc(100vh-92px)] max-w-7xl overflow-y-auto rounded-lg border border-line bg-surface/96 p-3 shadow-[0_18px_45px_rgba(10,37,64,0.14)] backdrop-blur-xl lg:hidden"
+            className="nav-mega-scroll mx-auto mt-2 max-h-[calc(100dvh-92px)] max-w-7xl overflow-y-auto rounded-lg border border-line bg-surface/96 p-3 shadow-[0_18px_45px_rgba(10,37,64,0.14)] backdrop-blur-xl lg:hidden"
             id="navbar-mobile-menu"
+            data-lenis-prevent
           >
             <div className="grid grid-cols-3 gap-2 border-b border-line pb-3">
               {mobileUtilityLinks.map((link) => {

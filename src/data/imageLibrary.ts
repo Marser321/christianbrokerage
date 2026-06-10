@@ -128,13 +128,17 @@ export const verticalFramePos = (slug: string, density: Density): string => {
   return override?.editorial ?? 'object-[center_48%]'
 }
 
+// Encuadre de las fotos reales (object-position). Valores afinados al rostro de
+// cada retrato: las tomas sentadas llevan la cara en el tercio medio-alto; la de
+// pie (home-certificates) la lleva muy arriba, por eso ancla casi al tope.
 const realPhotoFraming: Record<string, string> = {
-  'home-hero': 'object-[center_35%]',
-  'home-certificates': 'object-[center_45%]',
-  'home-office': 'object-[center_34%]',
-  'service-seguros': 'object-[center_36%]',
-  'service-taxes': 'object-[center_44%]',
-  'service-inmigracion': 'object-[center_34%]',
+  'home-hero': 'object-[center_22%]', // Foto 1 coral (apoyada en el escritorio)
+  'home-certificates': 'object-[center_15%]', // Foto 2 navy de pie
+  'home-office': 'object-[center_20%]', // Foto 4 beige en escritorio
+  'home-contacto': 'object-[center_22%]', // Foto 3 blanco (avatar 4:5)
+  'service-seguros': 'object-[center_22%]', // Foto 1 coral (reuso)
+  'service-taxes': 'object-[center_24%]', // Foto 5 gris (Money Works)
+  'service-inmigracion': 'object-[center_30%]', // Foto 3 blanco (reuso)
 }
 
 export const realPhotoFramePos = (slot: string): string =>

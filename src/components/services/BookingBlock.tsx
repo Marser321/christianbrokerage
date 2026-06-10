@@ -1,7 +1,9 @@
 import { CalendarDays, MessageCircle, Phone } from 'lucide-react'
+import { motion } from 'framer-motion'
 import type { ServiceVertical } from '../../data/serviceCatalog'
 import { createWhatsappHref, officePhoneDisplay, officePhoneHref } from '../../data/serviceCatalog'
 import { getCalendarSrc } from '../../lib/calendar'
+import { fadeUp, viewportOnce } from '../../lib/motion'
 
 type BookingBlockProps = {
   vertical: ServiceVertical
@@ -13,7 +15,7 @@ export function BookingBlock({ vertical }: BookingBlockProps) {
   return (
     <section id={vertical.bookingAnchor} className="booking-navy overflow-hidden bg-surface-invert py-16 text-white md:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-5 sm:px-6 lg:grid-cols-12 lg:px-8">
-        <div className="lg:col-span-5">
+        <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="lg:col-span-5">
           <p className="eyebrow mb-4 text-accent">Agenda</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-white md:text-5xl">{vertical.bookingTitle}</h2>
           <p className="mt-5 text-base leading-8 text-white/75">{vertical.bookingCopy}</p>
@@ -35,9 +37,15 @@ export function BookingBlock({ vertical }: BookingBlockProps) {
               {officePhoneDisplay}
             </a>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="lg:col-span-7">
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="lg:col-span-7"
+        >
           <div className="overflow-hidden rounded-lg border border-white/15 bg-surface-card shadow-[0_28px_70px_rgba(0,0,0,0.26)]">
             {calendarSrc ? (
               <iframe
@@ -77,7 +85,7 @@ export function BookingBlock({ vertical }: BookingBlockProps) {
               </div>
             )}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )
