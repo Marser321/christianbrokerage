@@ -12,6 +12,7 @@ type ServiceDrawerProps = {
   service: ServiceItem | null
   vertical: ServiceVertical
   onClose: () => void
+  onRequestLead: (service: ServiceItem) => void
 }
 
 const tabs: Array<{ id: DrawerTab; label: string }> = [
@@ -20,7 +21,7 @@ const tabs: Array<{ id: DrawerTab; label: string }> = [
   { id: 'risks', label: 'Consejos' },
 ]
 
-export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps) {
+export function ServiceDrawer({ service, vertical, onClose, onRequestLead }: ServiceDrawerProps) {
   const [tabState, setTabState] = useState<{ serviceId: string | null; tab: DrawerTab }>({
     serviceId: null,
     tab: 'overview',
@@ -90,7 +91,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                 aria-label="Cerrar"
                 className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-md border border-line bg-surface-card/85 text-heading backdrop-blur transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
-                <X size={18} />
+                <X size={18} aria-hidden="true" />
               </button>
             </div>
 
@@ -134,7 +135,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                     <ul className="space-y-3">
                       {service.whoNeedsIt.map((item) => (
                         <li key={item} className="flex gap-3 text-sm leading-7 text-body">
-                          <Check size={17} className="mt-1 shrink-0 text-accent" />
+                          <Check size={17} className="mt-1 shrink-0 text-accent" aria-hidden="true" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -160,12 +161,12 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                 <div className="space-y-7">
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="rounded-lg border border-line bg-surface-card p-5">
-                      <Clock className="mb-3 text-accent" size={20} />
+                      <Clock className="mb-3 text-accent" size={20} aria-hidden="true" />
                       <h3 className="font-sans text-sm font-semibold text-heading">Tiempo estimado</h3>
                       <p className="mt-2 text-sm leading-6 text-muted">{service.turnaround}</p>
                     </div>
                     <div className="rounded-lg border border-line bg-surface-card p-5">
-                      <FileText className="mb-3 text-accent" size={20} />
+                      <FileText className="mb-3 text-accent" size={20} aria-hidden="true" />
                       <h3 className="font-sans text-sm font-semibold text-heading">Documentos base</h3>
                       <p className="mt-2 text-sm leading-6 text-muted">{service.requirements}</p>
                     </div>
@@ -175,7 +176,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                     <ul className="space-y-3">
                       {service.premiumInclusions.map((item) => (
                         <li key={item} className="flex gap-3 rounded-md bg-surface-card px-4 py-3 text-sm leading-7 text-body">
-                          <Check size={17} className="mt-1 shrink-0 text-accent" />
+                          <Check size={17} className="mt-1 shrink-0 text-accent" aria-hidden="true" />
                           <span>{item}</span>
                         </li>
                       ))}
@@ -195,7 +196,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                     <ul className="space-y-3">
                       {service.commonMistakes.map((mistake) => (
                         <li key={mistake} className="flex gap-3 rounded-md border border-red-300/40 bg-red-500/10 px-4 py-3 text-sm leading-7 text-red-700 dark:text-red-300">
-                          <AlertTriangle size={17} className="mt-1 shrink-0" />
+                          <AlertTriangle size={17} className="mt-1 shrink-0" aria-hidden="true" />
                           <span>{mistake}</span>
                         </li>
                       ))}
@@ -218,22 +219,22 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
 
             <div className="sticky bottom-0 border-t border-line bg-surface/95 px-5 py-4 backdrop-blur md:px-8">
               <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() => onRequestLead(service)}
+                  className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                >
+                  Solicitar orientación
+                  <ArrowRight size={17} aria-hidden="true" />
+                </button>
                 <a
                   href={createWhatsappHref(`${vertical.whatsappPrompt} Servicio: ${service.title}`)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#20ba59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
+                  className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md border border-line px-5 py-3 text-sm font-semibold text-heading transition hover:border-[#25D366]/50 hover:text-[#128C7E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  <MessageCircle size={17} />
-                  Consultar por WhatsApp
-                </a>
-                <a
-                  href={`#${vertical.bookingAnchor}`}
-                  onClick={onClose}
-                  className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                >
-                  Agendar
-                  <ArrowRight size={17} />
+                  WhatsApp
+                  <MessageCircle size={17} aria-hidden="true" />
                 </a>
               </div>
             </div>

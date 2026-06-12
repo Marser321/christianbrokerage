@@ -1,16 +1,19 @@
 import { motion } from 'framer-motion'
-import { ArrowRight, Clock, FileText, MessageCircle } from 'lucide-react'
+import { ArrowRight, Clock, FileText } from 'lucide-react'
 import type { ServiceItem, ServiceVertical } from '../../data/serviceCatalog'
-import { createWhatsappHref } from '../../data/serviceCatalog'
 import { useVariant } from '../../context/VariantContext'
 import { framePos, serviceImage } from '../../data/imageLibrary'
+import { ServiceLeadWizard } from './ServiceLeadWizard'
+import type { ServiceLeadSelection } from './ServiceLeadWizard'
 
 type ServiceCardGridProps = {
   vertical: ServiceVertical
   onOpen: (service: ServiceItem) => void
+  onRequestLead: (service: ServiceItem) => void
+  leadSelection?: ServiceLeadSelection
 }
 
-export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
+export function ServiceCardGrid({ vertical, onOpen, onRequestLead, leadSelection }: ServiceCardGridProps) {
   const { density } = useVariant()
 
   return (
@@ -54,10 +57,10 @@ export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
                 <div className="absolute inset-0 flex flex-col p-4">
                   <div className="flex items-start justify-between gap-3">
                     <span className="flex h-11 w-11 items-center justify-center rounded-md bg-primary text-white shadow-sm">
-                      <service.icon size={20} />
+                      <service.icon size={20} aria-hidden="true" />
                     </span>
                     <span className="inline-flex items-center gap-1.5 rounded-sm bg-surface-card/85 px-2.5 py-1 text-xs font-semibold text-muted backdrop-blur">
-                      <Clock size={13} />
+                      <Clock size={13} aria-hidden="true" />
                       {service.turnaround}
                     </span>
                   </div>
@@ -87,36 +90,39 @@ export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
 
                 <div className="mt-auto pt-6">
                   <div className="mb-4 flex items-start gap-2 border-t border-line pt-4 text-xs leading-5 text-muted">
-                    <FileText size={15} className="mt-0.5 shrink-0 text-accent" />
+                    <FileText size={15} className="mt-0.5 shrink-0 text-accent" aria-hidden="true" />
                     <span>{service.requirements}</span>
                   </div>
                   <div className="flex flex-col gap-2 sm:flex-row">
                     <button
                       type="button"
-                      onClick={() => onOpen(service)}
+                      onClick={() => onRequestLead(service)}
                       className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Ver detalle
-                      <ArrowRight size={15} />
+                      Orientarme
+                      <ArrowRight size={15} aria-hidden="true" />
                     </button>
-                    <a
-                      href={createWhatsappHref(`${vertical.whatsappPrompt} Servicio: ${service.title}`)}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Consultar ${service.title} por WhatsApp`}
-                      className="group/wa relative inline-flex min-h-11 items-center justify-center rounded-md border border-line px-4 py-2.5 text-heading transition hover:border-[#25D366]/50 hover:text-[#128C7E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    <button
+                      type="button"
+                      onClick={() => onOpen(service)}
+                      className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-line px-4 py-2.5 text-sm font-semibold text-heading transition hover:border-accent/50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      <MessageCircle size={17} />
-                      <span className="pointer-events-none absolute bottom-full left-1/2 mb-2 -translate-x-1/2 whitespace-nowrap rounded-md border border-line bg-surface-card px-2.5 py-1 text-xs font-semibold text-heading opacity-0 shadow-lg transition-opacity duration-200 group-hover/wa:opacity-100">
-                        Consultar por WhatsApp
-                      </span>
-                    </a>
+                      Ver detalle
+                      <FileText size={15} aria-hidden="true" />
+                    </button>
                   </div>
                 </div>
               </div>
             </motion.article>
           ))}
         </div>
+
+        <ServiceLeadWizard
+          key={`${leadSelection?.slug ?? vertical.slug}-${leadSelection?.serviceId ?? 'none'}-${leadSelection?.version ?? 0}`}
+          className="mt-10 md:mt-12"
+          selection={leadSelection}
+          verticalHint={vertical}
+        />
       </div>
     </section>
   )

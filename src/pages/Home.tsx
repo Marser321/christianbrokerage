@@ -1,10 +1,14 @@
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Building2, CalendarDays, CheckCircle2, MessageCircle, Phone } from 'lucide-react'
 import { Hero } from '../components/sections/Hero'
+import { ServiceLeadWizard } from '../components/services/ServiceLeadWizard'
+import type { ServiceLeadSelection } from '../components/services/ServiceLeadWizard'
 import { NumberTicker } from '../components/ui/NumberTicker'
 import { fadeUp, staggerContainer, staggerItem, viewportOnce } from '../lib/motion'
 import { useVariant } from '../context/VariantContext'
+import { scrollTo } from '../hooks/useSmoothScroll'
 import { mainCardFramePos, mainCardImage, realPhotoFramePos } from '../data/imageLibrary'
 import { homeServicePreviewCount, serviceHref } from '../data/navigationCatalog'
 import damarisNavyStanding from '../assets/images/real/damaris-navy-standing.jpg'
@@ -29,6 +33,25 @@ const processSteps = [
 
 function HomeServices() {
   const { density } = useVariant()
+  const [leadSelection, setLeadSelection] = useState<ServiceLeadSelection>({
+    slug: 'unsure',
+    serviceId: null,
+    version: 0,
+  })
+
+  const requestLeadForVertical = (vertical: (typeof verticals)[number]) => {
+    setLeadSelection((current) => ({
+      slug: vertical.slug,
+      serviceId: vertical.services[0]?.id ?? null,
+      version: (current.version ?? 0) + 1,
+    }))
+
+    window.setTimeout(() => {
+      const target = document.getElementById('service-lead-wizard')
+      if (target) scrollTo(target)
+    }, 0)
+  }
+
   return (
     <section id="servicios" className="bg-surface-2 py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
@@ -80,18 +103,34 @@ function HomeServices() {
                       </li>
                     ))}
                   </ul>
-                  <Link
-                    to={`/${vertical.slug}`}
-                    className="mt-auto inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
-                  >
-                    Explorar {vertical.slug === 'inmigracion' ? 'inmigración' : vertical.slug}
-                    <ArrowRight size={16} aria-hidden="true" />
-                  </Link>
+                  <div className="mt-auto flex flex-col gap-2 pt-6 sm:flex-row lg:flex-col xl:flex-row">
+                    <button
+                      type="button"
+                      onClick={() => requestLeadForVertical(vertical)}
+                      className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                      Orientarme
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </button>
+                    <Link
+                      to={`/${vertical.slug}`}
+                      className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-line px-4 py-2.5 text-sm font-semibold text-heading transition hover:border-accent/50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                    >
+                      Explorar
+                      <ArrowRight size={16} aria-hidden="true" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             </motion.article>
           ))}
         </motion.div>
+
+        <ServiceLeadWizard
+          key={`${leadSelection.slug ?? 'unsure'}-${leadSelection.serviceId ?? 'none'}-${leadSelection.version ?? 0}`}
+          className="mt-10 md:mt-12"
+          selection={leadSelection}
+        />
       </div>
     </section>
   )
