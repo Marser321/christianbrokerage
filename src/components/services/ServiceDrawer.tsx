@@ -71,7 +71,7 @@ export function ServiceDrawer({ service, vertical, onClose, onRequestLead }: Ser
             transition={{ type: 'spring', damping: 32, stiffness: 260 }}
             className="relative z-10 flex h-full w-full flex-col overflow-y-auto bg-surface shadow-[-24px_0_70px_rgba(10,37,64,0.25)] sm:max-w-2xl"
           >
-            <div className="relative h-52 shrink-0 overflow-hidden">
+            <div className="relative h-40 shrink-0 overflow-hidden">
               <img
                 src={serviceImage(service.id, density)}
                 alt=""
@@ -117,7 +117,7 @@ export function ServiceDrawer({ service, vertical, onClose, onRequestLead }: Ser
             </div>
 
             <div
-              className="editorial-bg flex-1 overflow-hidden px-5 py-7 md:px-8"
+              className="editorial-bg flex-1 overflow-hidden px-5 pt-4 pb-7 md:px-8"
               style={
                 density === 'combo'
                   ? ({ '--editorial-bg': `url("${serviceImage(service.id, 'minimal')}")` } as React.CSSProperties)
@@ -169,6 +169,9 @@ export function ServiceDrawer({ service, vertical, onClose, onRequestLead }: Ser
                       <FileText className="mb-3 text-accent" size={20} aria-hidden="true" />
                       <h3 className="font-sans text-sm font-semibold text-heading">Documentos base</h3>
                       <p className="mt-2 text-sm leading-6 text-muted">{service.requirements}</p>
+                      <p className="mt-2 text-xs leading-5 text-muted/80">
+                        Después de tu consulta podríamos solicitar información o documentos adicionales según tu caso.
+                      </p>
                     </div>
                   </div>
                   <section>

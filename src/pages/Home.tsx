@@ -11,8 +11,7 @@ import { useVariant } from '../context/VariantContext'
 import { scrollTo } from '../hooks/useSmoothScroll'
 import { mainCardFramePos, mainCardImage, realPhotoFramePos } from '../data/imageLibrary'
 import { homeServicePreviewCount, serviceHref } from '../data/navigationCatalog'
-import damarisNavyStanding from '../assets/images/real/damaris-navy-standing.jpg'
-import damarisTanDesk from '../assets/images/real/damaris-tan-desk.jpg'
+import damarisReal from '../assets/images/real/damaris-real.jpg'
 import damarisWhiteBook from '../assets/images/real/damaris-white-book.jpg'
 import {
   createWhatsappHref,
@@ -141,18 +140,18 @@ function OfficeProof() {
     <section id="nosotros" className="bg-surface py-16 md:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 sm:px-6 lg:grid-cols-12 lg:items-center lg:px-8">
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="lg:col-span-5">
-          <p className="eyebrow mb-4">Presencia local</p>
+          <p className="eyebrow mb-4">Nosotros</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-heading md:text-5xl">
-            Una oficina real para procesos que necesitan confianza real.
+            Más de 30 años de experiencia, en el mismo local de Washington Heights.
           </h2>
           <p className="mt-5 text-base leading-8 text-muted">
-            El nuevo sistema visual pone adelante lo que ya sostiene la marca: atención presencial, certificaciones, documentos organizados y una relación directa con la comunidad hispana de Nueva York.
+            Christian Brokerage es un negocio con raíces en la comunidad latina de Nueva York: atención presencial, certificaciones a la vista y un trato directo en español. Más de tres décadas en servicios financieros y administrativos, desde la misma oficina de siempre.
           </p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="border-l border-line pl-4">
               <Building2 className="mb-3 text-accent" size={21} />
               <p className="font-sans text-sm font-semibold text-heading">501 W 161st St</p>
-              <p className="mt-1 text-sm leading-6 text-muted">Washington Heights, NY 10032</p>
+              <p className="mt-1 text-sm leading-6 text-muted">Washington Heights, NY 10032 · el mismo local de siempre.</p>
             </div>
             <div className="border-l border-line pl-4">
               <Phone className="mb-3 text-accent" size={21} />
@@ -167,25 +166,43 @@ function OfficeProof() {
           initial="hidden"
           whileInView="visible"
           viewport={viewportOnce}
-          className="grid gap-5 lg:col-span-7 md:grid-cols-2"
+          className="grid gap-5 lg:col-span-7 sm:grid-cols-2"
         >
-          <motion.figure variants={staggerItem}>
-            <img
-              src={damarisNavyStanding}
-              alt="Damaris Gloder de pie en su oficina, con diplomas y certificaciones detrás"
-              className={`aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)] ${realPhotoFramePos('home-certificates')}`}
-              loading="lazy"
-            />
-            <figcaption className="mt-3 text-sm leading-6 text-muted">Certificaciones visibles y proceso documentado.</figcaption>
+          <motion.figure
+            variants={staggerItem}
+            className="overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_22px_58px_rgba(10,37,64,0.1)]"
+          >
+            <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-primary-dark">
+              <span className="font-serif text-6xl font-semibold text-accent/90">CE</span>
+              <span className="absolute inset-x-0 bottom-3 text-center text-[11px] uppercase tracking-wide text-white/55">
+                Foto próximamente
+              </span>
+            </div>
+            <figcaption className="p-5">
+              <p className="font-sans text-base font-semibold text-heading">Christian Eduardo</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent">Fundador · Preparación de impuestos (EA)</p>
+              <p className="mt-3 text-sm leading-6 text-muted">
+                Cuenta con amplia experiencia en la preparación de impuestos y gestión administrativa, con énfasis en precisión y cumplimiento.
+              </p>
+            </figcaption>
           </motion.figure>
-          <motion.figure variants={staggerItem} className="md:mt-12">
+          <motion.figure
+            variants={staggerItem}
+            className="overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_22px_58px_rgba(10,37,64,0.1)] sm:mt-12"
+          >
             <img
-              src={damarisTanDesk}
-              alt="Damaris Gloder en su escritorio de Christian Brokerage"
-              className={`aspect-[4/5] w-full rounded-lg border border-line object-cover shadow-[0_22px_58px_rgba(10,37,64,0.1)] ${realPhotoFramePos('home-office')}`}
+              src={damarisReal}
+              alt="Damaris Escalante de Christian Brokerage en su oficina"
+              className="aspect-[4/5] w-full object-cover object-[center_25%]"
               loading="lazy"
             />
-            <figcaption className="mt-3 text-sm leading-6 text-muted">Atención presencial para revisar documentos con calma.</figcaption>
+            <figcaption className="p-5">
+              <p className="font-sans text-base font-semibold text-heading">Damaris Escalante</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent">Coordinadora de Servicios · Seguros e Inmigración</p>
+              <p className="mt-3 text-sm leading-6 text-muted">
+                Con más de 25 años de experiencia, ha desarrollado su trayectoria trabajando de forma directa con clientes, especialmente dentro de la comunidad latina de Washington Heights.
+              </p>
+            </figcaption>
           </motion.figure>
         </motion.div>
       </div>
@@ -252,12 +269,12 @@ function HomeBooking() {
           <figure className="mt-8 flex items-center gap-4 border-t border-white/15 pt-6">
             <img
               src={damarisWhiteBook}
-              alt="Damaris Gloder, Enrolled Agent de Christian Brokerage"
+              alt="Damaris Escalante, Enrolled Agent de Christian Brokerage"
               className={`h-20 w-16 shrink-0 rounded-lg border border-white/20 object-cover ${realPhotoFramePos('home-contacto')}`}
               loading="lazy"
             />
             <figcaption className="text-sm leading-6 text-white/75">
-              <span className="block font-semibold text-white">Te atiende Damaris Gloder</span>
+              <span className="block font-semibold text-white">Te atiende Damaris Escalante</span>
               Enrolled Agent (EA) · atención bilingüe en español.
             </figcaption>
           </figure>

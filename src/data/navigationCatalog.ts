@@ -1,6 +1,7 @@
 import {
   Building2,
   CalendarDays,
+  FileText,
   Globe,
   Home,
   Scale,
@@ -89,11 +90,11 @@ export const areaNavGroups: AreaNavGroup[] = [
       {
         label: 'Negocio y propiedad',
         description: 'Pólizas para operar, cerrar o proteger activos.',
-        items: [item('seguros', 'negocio'), item('seguros', 'casa'), item('seguros', 'hipotecas')],
+        items: [item('seguros', 'negocio'), item('seguros', 'casa')],
       },
       {
         label: 'Familia y protección',
-        description: 'Salud, vida, identidad y seguridad cotidiana.',
+        description: 'Vida, identidad y seguridad cotidiana.',
         items: [item('seguros', 'salud-vida'), item('seguros', 'identidad'), item('seguros', 'alarmas')],
       },
     ],
@@ -113,8 +114,8 @@ export const areaNavGroups: AreaNavGroup[] = [
       },
       {
         label: 'Negocio',
-        description: 'Estructura, registros y declaraciones comerciales.',
-        items: [item('taxes', 'taxes-comerciales'), item('taxes', 'empresas')],
+        description: 'Registros y declaraciones comerciales.',
+        items: [item('taxes', 'taxes-comerciales')],
       },
       {
         label: 'IRS e identidad fiscal',
@@ -143,13 +144,8 @@ export const areaNavGroups: AreaNavGroup[] = [
       },
       {
         label: 'Ciudadanía',
-        description: 'Preparación documental para naturalización.',
+        description: 'Naturalización (N-400) y Certificado de Ciudadanía (N-600).',
         items: [item('inmigracion', 'n400')],
-      },
-      {
-        label: 'Documentos',
-        description: 'Traducciones certificadas y notarización.',
-        items: [item('inmigracion', 'traducciones')],
       },
       {
         label: 'Consular',
@@ -158,11 +154,36 @@ export const areaNavGroups: AreaNavGroup[] = [
       },
     ],
   },
+  {
+    key: 'otros',
+    label: 'Otros Servicios',
+    to: '/otros',
+    icon: FileText,
+    eyebrow: serviceVerticals.otros.eyebrow,
+    description: 'Notaría, divorcios, traducciones y formación de compañías.',
+    groups: [
+      {
+        label: 'Documentos y notaría',
+        description: 'Traducciones certificadas y notarización.',
+        items: [item('otros', 'traducciones')],
+      },
+      {
+        label: 'Legal y familia',
+        description: 'Asistencia documental en divorcios.',
+        items: [item('otros', 'divorcios')],
+      },
+      {
+        label: 'Negocio',
+        description: 'Formación de compañías.',
+        items: [item('otros', 'empresas')],
+      },
+    ],
+  },
 ]
 
 export const footerServiceLinks = [
   ...areaNavGroups.map((area) => ({ label: area.label, href: area.to })),
-  { label: 'Traducciones y notaría', href: serviceHref('inmigracion', 'traducciones') },
+  { label: 'Traducciones y notaría', href: serviceHref('otros', 'traducciones') },
 ]
 
 export const footerCompanyLinks = [

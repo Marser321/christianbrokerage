@@ -79,9 +79,9 @@ export function Footer() {
               <div className="flex items-start gap-3 border-t border-white/10 pt-4">
                 <Clock size={15} className="mt-0.5 shrink-0" aria-hidden="true" />
                 <span>
-                  Lun-Vie: 9 AM - 6 PM
+                  Lun-Vie: 9 AM - 5 PM
                   <br />
-                  Sábados: 10 AM - 3 PM
+                  Sábados (enero–abril): 9 AM - 5 PM
                 </span>
               </div>
             </div>

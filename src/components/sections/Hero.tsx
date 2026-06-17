@@ -86,7 +86,7 @@ export function Hero() {
           <div className="overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_28px_70px_rgba(10,37,64,0.16)]">
             <img
               src={damarisCoralDesk}
-              alt="Damaris Gloder de Christian Brokerage atendiendo desde la oficina"
+              alt="Damaris Escalante de Christian Brokerage atendiendo desde la oficina"
               className={`aspect-[4/5] w-full object-cover ${realPhotoFramePos('home-hero')}`}
               loading="eager"
               fetchPriority="high"

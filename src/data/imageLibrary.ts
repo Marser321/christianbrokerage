@@ -16,7 +16,6 @@ export const serviceImageKey: Record<string, string> = {
   negocio: 'seg-negocio',
   casa: 'seg-casa',
   'salud-vida': 'seg-salud',
-  hipotecas: 'seg-hipoteca',
   identidad: 'seg-identidad',
   alarmas: 'seg-alarma',
   'taxes-personales': 'tax-personal',
@@ -31,7 +30,14 @@ export const serviceImageKey: Record<string, string> = {
   n400: 'inm-n400',
   traducciones: 'inm-trad',
   consular: 'inm-consular',
+  divorcios: 'inm-i130',
 }
+
+// Slugs de verticales sin assets propios reutilizan otro set existente.
+const verticalSlugAlias: Record<string, string> = {
+  otros: 'inmigracion',
+}
+const aliasSlug = (slug: string): string => verticalSlugAlias[slug] ?? slug
 
 /** Imagen de un servicio (banner de card / cabecera de drawer) por su id. */
 export const serviceImage = (serviceId: string, density: Density): string =>
@@ -41,15 +47,15 @@ export const serviceImage = (serviceId: string, density: Density): string =>
  *  En "combo" se muestra a propósito el still-life editorial (objetos) para que la
  *  página combine personas (banners) + objetos (panel); la foto solo en "completo". */
 export const verticalImage = (slug: string, density: Density): string =>
-  `${BASE}/verticals/${slug}${density === 'rich' ? '-foto' : ''}.webp`
+  `${BASE}/verticals/${aliasSlug(slug)}${density === 'rich' ? '-foto' : ''}.webp`
 
 /** Banner/fondo de las 3 tarjetas principales del Home. */
 export const mainCardImage = (slug: string, density: Density): string =>
-  `${BASE}/cards/main-${slug}${sfx(density)}.webp`
+  `${BASE}/cards/main-${aliasSlug(slug)}${sfx(density)}.webp`
 
 /** Fondo del drawer por vertical (banda superior). */
 export const drawerImage = (slug: string, density: Density): string =>
-  `${BASE}/drawer/drawer-${slug}${sfx(density)}.webp`
+  `${BASE}/drawer/drawer-${aliasSlug(slug)}${sfx(density)}.webp`
 
 /** Fondo del mega-menú por grupo (neutral | seguros | taxes | inmigracion). */
 export const menuImage = (group: string, density: Density): string =>
@@ -61,6 +67,7 @@ export const menuGroupKey: Record<string, string> = {
   seguros: 'seguros',
   taxes: 'taxes',
   inmigracion: 'inmigracion',
+  otros: 'neutral',
   nosotros: 'neutral',
 }
 
@@ -79,7 +86,6 @@ export const serviceFraming: Record<string, { foto?: string; editorial?: string 
   negocio: { foto: 'object-[right_32%]', editorial: 'object-[right_62%]' },
   casa: { foto: 'object-[right_34%]', editorial: 'object-[right_62%]' },
   'salud-vida': { foto: 'object-[right_26%]', editorial: 'object-[right_60%]' },
-  hipotecas: { foto: 'object-[right_30%]', editorial: 'object-[right_62%]' },
   identidad: { foto: 'object-[right_28%]', editorial: 'object-[right_60%]' },
   alarmas: { foto: 'object-[right_30%]', editorial: 'object-[right_62%]' },
   'taxes-personales': { foto: 'object-[right_26%]', editorial: 'object-[right_58%]' },

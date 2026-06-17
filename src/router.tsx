@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { Seguros } from './pages/Seguros'
 import { Taxes } from './pages/Taxes'
 import { Inmigracion } from './pages/Inmigracion'
+import { Otros } from './pages/Otros'
 
 export const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ export const router = createBrowserRouter([
       {
         path: 'inmigracion',
         element: <Inmigracion />,
+      },
+      {
+        path: 'otros',
+        element: <Otros />,
       },
     ],
   },

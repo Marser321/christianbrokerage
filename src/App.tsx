@@ -22,6 +22,7 @@ function App() {
       '/seguros': 'Seguros Generales y Comerciales | Christian Brokerage',
       '/taxes': 'Taxes e Impuestos Certificados | Christian Brokerage',
       '/inmigracion': 'Acompañamiento y Trámites Migratorios | Christian Brokerage',
+      '/otros': 'Notaría, Divorcios, Traducciones y Formación de Compañías | Christian Brokerage',
     }
 
     const descriptions: Record<string, string> = {
@@ -29,6 +30,7 @@ function App() {
       '/seguros': 'Cotiza seguro de auto, TLC, negocio, casa, vida y más con asesoría clara en español.',
       '/taxes': 'Preparación de taxes personales y comerciales, ITIN y representación ante el IRS.',
       '/inmigracion': 'Soporte administrativo para trámites migratorios, traducciones certificadas y organización documental.',
+      '/otros': 'Notaría, asistencia documental en divorcios, traducciones certificadas y formación de compañías (LLC o corporación).',
     }
 
     document.title = titles[pathname] || 'Christian Brokerage | Seguros, Taxes e Inmigración'

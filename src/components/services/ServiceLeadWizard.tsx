@@ -64,7 +64,7 @@ type ServiceLeadWizardProps = {
   verticalHint?: ServiceVertical
 }
 
-const verticalList = [serviceVerticals.seguros, serviceVerticals.taxes, serviceVerticals.inmigracion]
+const verticalList = [serviceVerticals.seguros, serviceVerticals.taxes, serviceVerticals.inmigracion, serviceVerticals.otros]
 const trackedParamNames = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'gclid', 'fbclid'] as const
 type TrackedParamName = (typeof trackedParamNames)[number]
 const memoryTrackedParams: Partial<Record<TrackedParamName, string>> = {}
@@ -86,13 +86,18 @@ const areaCopy: Record<WizardSlug, { label: string; desc: string; icon: LucideIc
   },
   taxes: {
     label: 'Taxes',
-    desc: 'Declaraciones, ITIN, empresas, cartas y representacion IRS.',
+    desc: 'Declaraciones, ITIN, cartas y representacion IRS.',
     icon: serviceVerticals.taxes.trust[0]!.icon,
   },
   inmigracion: {
     label: 'Inmigracion',
-    desc: 'Documentos, traducciones y soporte administrativo migratorio.',
+    desc: 'Peticiones, ciudadanía y soporte administrativo migratorio.',
     icon: serviceVerticals.inmigracion.trust[0]!.icon,
+  },
+  otros: {
+    label: 'Otros Servicios',
+    desc: 'Notaría, divorcios, traducciones y formación de compañías.',
+    icon: serviceVerticals.otros.trust[0]!.icon,
   },
   unsure: {
     label: 'No estoy seguro',
