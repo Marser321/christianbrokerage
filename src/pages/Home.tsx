@@ -11,6 +11,7 @@ import { useVariant } from '../context/VariantContext'
 import { scrollTo } from '../hooks/useSmoothScroll'
 import { mainCardFramePos, mainCardImage, realPhotoFramePos } from '../data/imageLibrary'
 import { homeServicePreviewCount, serviceHref } from '../data/navigationCatalog'
+import christianReal from '../assets/images/real/christian-real.jpg'
 import damarisReal from '../assets/images/real/damaris-real.jpg'
 import damarisWhiteBook from '../assets/images/real/damaris-white-book.jpg'
 import {
@@ -172,12 +173,12 @@ function OfficeProof() {
             variants={staggerItem}
             className="overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_22px_58px_rgba(10,37,64,0.1)]"
           >
-            <div className="relative flex aspect-[4/5] items-center justify-center overflow-hidden bg-gradient-to-br from-primary to-primary-dark">
-              <span className="font-serif text-6xl font-semibold text-accent/90">CE</span>
-              <span className="absolute inset-x-0 bottom-3 text-center text-[11px] uppercase tracking-wide text-white/55">
-                Foto próximamente
-              </span>
-            </div>
+            <img
+              src={christianReal}
+              alt="Christian Eduardo, fundador de Christian Brokerage, en su oficina"
+              className="aspect-[4/5] w-full object-cover object-[center_25%]"
+              loading="lazy"
+            />
             <figcaption className="p-5">
               <p className="font-sans text-base font-semibold text-heading">Christian Eduardo</p>
               <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent">Fundador · Preparación de impuestos (EA)</p>
