@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { CSSProperties, MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, ChevronDown, Menu, Phone, X } from 'lucide-react'
+import { ArrowRight, ChevronDown, Compass, Menu, Phone, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { ThemedLogo } from '../ui/ThemedLogo'
 import { useVariant } from '../../context/VariantContext'
@@ -200,6 +200,16 @@ export function Navbar() {
               <span>{officePhoneDisplay}</span>
             </a>
             <Link
+              to="/diagnostico"
+              onMouseEnter={() => setActiveDropdown(null)}
+              onPointerEnter={() => setActiveDropdown(null)}
+              onFocus={() => setActiveDropdown(null)}
+              className="inline-flex min-h-11 items-center gap-2 rounded-md border border-accent/40 px-4 py-2.5 text-sm font-semibold text-heading transition hover:border-accent hover:text-accent"
+            >
+              <Compass size={15} aria-hidden="true" />
+              Encuentra tu servicio
+            </Link>
+            <Link
               to="/#contacto"
               onClick={(event) => handleRouteClick(event, '/#contacto')}
               onMouseEnter={() => setActiveDropdown(null)}
@@ -393,6 +403,14 @@ export function Navbar() {
             </div>
 
             <div className="mt-3 grid grid-cols-1 gap-2 border-t border-line pt-3 sm:grid-cols-2">
+              <Link
+                to="/diagnostico"
+                onClick={(event) => handleRouteClick(event, '/diagnostico')}
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-accent/40 bg-surface-card px-4 py-2.5 text-sm font-semibold text-heading sm:col-span-2"
+              >
+                <Compass size={15} aria-hidden="true" />
+                Encuentra tu servicio
+              </Link>
               <Link
                 to="/#contacto"
                 onClick={(event) => handleRouteClick(event, '/#contacto')}

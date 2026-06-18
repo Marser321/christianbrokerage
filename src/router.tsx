@@ -5,6 +5,7 @@ import { Seguros } from './pages/Seguros'
 import { Taxes } from './pages/Taxes'
 import { Inmigracion } from './pages/Inmigracion'
 import { Otros } from './pages/Otros'
+import { Diagnostico } from './pages/Diagnostico'
 
 export const router = createBrowserRouter([
   {
@@ -30,6 +31,10 @@ export const router = createBrowserRouter([
       {
         path: 'otros',
         element: <Otros />,
+      },
+      {
+        path: 'diagnostico',
+        element: <Diagnostico />,
       },
     ],
   },

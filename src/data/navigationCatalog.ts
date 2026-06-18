@@ -56,6 +56,14 @@ export function serviceHref(slug: ServiceSlug, serviceId: string) {
   return `/${slug}?servicio=${serviceId}`
 }
 
+export function diagnosticoHref(slug?: ServiceSlug, serviceId?: string) {
+  const params = new URLSearchParams()
+  if (slug) params.set('area', slug)
+  if (serviceId) params.set('servicio', serviceId)
+  const query = params.toString()
+  return query ? `/diagnostico?${query}` : '/diagnostico'
+}
+
 function serviceById(slug: ServiceSlug, serviceId: string): ServiceItem {
   const service = serviceVerticals[slug].services.find((item) => item.id === serviceId)
   if (!service) throw new Error(`Servicio no encontrado: ${slug}/${serviceId}`)

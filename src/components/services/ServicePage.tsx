@@ -1,15 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { CheckCircle2 } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
 import type { ServiceItem, ServiceVertical } from '../../data/serviceCatalog'
 import { useVariant } from '../../context/VariantContext'
-import { scrollTo } from '../../hooks/useSmoothScroll'
 import { verticalFramePos, verticalImage } from '../../data/imageLibrary'
 import { BookingBlock } from './BookingBlock'
 import { ServiceCardGrid } from './ServiceCardGrid'
 import { ServiceDrawer } from './ServiceDrawer'
 import { ServiceHero } from './ServiceHero'
-import type { ServiceLeadSelection } from './ServiceLeadWizard'
 import { TrustBand } from './TrustBand'
 
 type ServicePageProps = {
@@ -21,11 +19,6 @@ export function ServicePage({ vertical }: ServicePageProps) {
   const { density } = useVariant()
   const serviceId = searchParams.get('servicio')
   const activeService = serviceId ? vertical.services.find((item) => item.id === serviceId) ?? null : null
-  const [leadSelection, setLeadSelection] = useState<ServiceLeadSelection>({
-    slug: vertical.slug,
-    serviceId: activeService?.id ?? null,
-    version: 0,
-  })
 
   useEffect(() => {
     if (!serviceId || activeService) return
@@ -34,13 +27,6 @@ export function ServicePage({ vertical }: ServicePageProps) {
     nextParams.delete('servicio')
     setSearchParams(nextParams, { replace: true })
   }, [activeService, searchParams, serviceId, setSearchParams])
-
-  const scrollToLeadWizard = () => {
-    window.setTimeout(() => {
-      const target = document.getElementById('service-lead-wizard')
-      if (target) scrollTo(target)
-    }, 0)
-  }
 
   const openService = (service: ServiceItem) => {
     const nextParams = new URLSearchParams(searchParams)
@@ -54,21 +40,11 @@ export function ServicePage({ vertical }: ServicePageProps) {
     setSearchParams(nextParams, { replace: true })
   }
 
-  const requestLead = (service: ServiceItem) => {
-    setLeadSelection((current) => ({
-      slug: vertical.slug,
-      serviceId: service.id,
-      version: (current.version ?? 0) + 1,
-    }))
-    closeService()
-    scrollToLeadWizard()
-  }
-
   return (
     <div className={`service-page service-page-${vertical.slug} bg-surface text-body`}>
       <ServiceHero vertical={vertical} />
       <TrustBand items={vertical.trust} />
-      <ServiceCardGrid vertical={vertical} onOpen={openService} onRequestLead={requestLead} leadSelection={leadSelection} />
+      <ServiceCardGrid vertical={vertical} onOpen={openService} />
 
       <section className="bg-surface py-16 md:py-24">
         <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 sm:px-6 lg:grid-cols-12 lg:px-8">
@@ -107,7 +83,7 @@ export function ServicePage({ vertical }: ServicePageProps) {
       </section>
 
       <BookingBlock vertical={vertical} />
-      <ServiceDrawer service={activeService} vertical={vertical} onClose={closeService} onRequestLead={requestLead} />
+      <ServiceDrawer service={activeService} vertical={vertical} onClose={closeService} />
     </div>
   )
 }

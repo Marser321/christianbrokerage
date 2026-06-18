@@ -23,6 +23,7 @@ function App() {
       '/taxes': 'Taxes e Impuestos Certificados | Christian Brokerage',
       '/inmigracion': 'Acompañamiento y Trámites Migratorios | Christian Brokerage',
       '/otros': 'Notaría, Divorcios, Traducciones y Formación de Compañías | Christian Brokerage',
+      '/diagnostico': 'Encuentra tu servicio | Christian Brokerage',
     }
 
     const descriptions: Record<string, string> = {
@@ -31,6 +32,7 @@ function App() {
       '/taxes': 'Preparación de taxes personales y comerciales, ITIN y representación ante el IRS.',
       '/inmigracion': 'Soporte administrativo para trámites migratorios, traducciones certificadas y organización documental.',
       '/otros': 'Notaría, asistencia documental en divorcios, traducciones certificadas y formación de compañías (LLC o corporación).',
+      '/diagnostico': 'Cuéntanos tu situación en 3 o 4 preguntas y te recomendamos el servicio correcto, sin compromiso.',
     }
 
     document.title = titles[pathname] || 'Christian Brokerage | Seguros, Taxes e Inmigración'

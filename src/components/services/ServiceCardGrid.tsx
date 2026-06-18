@@ -1,19 +1,17 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { ArrowRight, Clock, FileText } from 'lucide-react'
 import type { ServiceItem, ServiceVertical } from '../../data/serviceCatalog'
 import { useVariant } from '../../context/VariantContext'
 import { framePos, serviceImage } from '../../data/imageLibrary'
-import { ServiceLeadWizard } from './ServiceLeadWizard'
-import type { ServiceLeadSelection } from './ServiceLeadWizard'
+import { diagnosticoHref } from '../../data/navigationCatalog'
 
 type ServiceCardGridProps = {
   vertical: ServiceVertical
   onOpen: (service: ServiceItem) => void
-  onRequestLead: (service: ServiceItem) => void
-  leadSelection?: ServiceLeadSelection
 }
 
-export function ServiceCardGrid({ vertical, onOpen, onRequestLead, leadSelection }: ServiceCardGridProps) {
+export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
   const { density } = useVariant()
 
   return (
@@ -94,14 +92,13 @@ export function ServiceCardGrid({ vertical, onOpen, onRequestLead, leadSelection
                     <span>{service.requirements}</span>
                   </div>
                   <div className="flex flex-col gap-2 sm:flex-row">
-                    <button
-                      type="button"
-                      onClick={() => onRequestLead(service)}
+                    <Link
+                      to={diagnosticoHref(vertical.slug, service.id)}
                       className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       Orientarme
                       <ArrowRight size={15} aria-hidden="true" />
-                    </button>
+                    </Link>
                     <button
                       type="button"
                       onClick={() => onOpen(service)}
@@ -116,13 +113,6 @@ export function ServiceCardGrid({ vertical, onOpen, onRequestLead, leadSelection
             </motion.article>
           ))}
         </div>
-
-        <ServiceLeadWizard
-          key={`${leadSelection?.slug ?? vertical.slug}-${leadSelection?.serviceId ?? 'none'}-${leadSelection?.version ?? 0}`}
-          className="mt-10 md:mt-12"
-          selection={leadSelection}
-          verticalHint={vertical}
-        />
       </div>
     </section>
   )

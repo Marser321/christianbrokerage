@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, Check, Clock, FileText, MessageCircle, X } from 'lucide-react'
 import type { ServiceItem, ServiceVertical } from '../../data/serviceCatalog'
 import { createWhatsappHref } from '../../data/serviceCatalog'
 import { useVariant } from '../../context/VariantContext'
 import { framePos, serviceImage } from '../../data/imageLibrary'
+import { diagnosticoHref } from '../../data/navigationCatalog'
 
 type DrawerTab = 'overview' | 'requirements' | 'risks'
 
@@ -12,7 +14,6 @@ type ServiceDrawerProps = {
   service: ServiceItem | null
   vertical: ServiceVertical
   onClose: () => void
-  onRequestLead: (service: ServiceItem) => void
 }
 
 const tabs: Array<{ id: DrawerTab; label: string }> = [
@@ -21,7 +22,7 @@ const tabs: Array<{ id: DrawerTab; label: string }> = [
   { id: 'risks', label: 'Consejos' },
 ]
 
-export function ServiceDrawer({ service, vertical, onClose, onRequestLead }: ServiceDrawerProps) {
+export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps) {
   const [tabState, setTabState] = useState<{ serviceId: string | null; tab: DrawerTab }>({
     serviceId: null,
     tab: 'overview',
@@ -222,14 +223,13 @@ export function ServiceDrawer({ service, vertical, onClose, onRequestLead }: Ser
 
             <div className="sticky bottom-0 border-t border-line bg-surface/95 px-5 py-4 backdrop-blur md:px-8">
               <div className="flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="button"
-                  onClick={() => onRequestLead(service)}
+                <Link
+                  to={diagnosticoHref(vertical.slug, service.id)}
                   className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
                   Solicitar orientación
                   <ArrowRight size={17} aria-hidden="true" />
-                </button>
+                </Link>
                 <a
                   href={createWhatsappHref(`${vertical.whatsappPrompt} Servicio: ${service.title}`)}
                   target="_blank"
