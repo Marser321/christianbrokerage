@@ -124,7 +124,7 @@ function OfficeProof() {
             <div className="border-l border-line pl-4">
               <Building2 className="mb-3 text-accent" size={21} />
               <p className="font-sans text-sm font-semibold text-heading">501 W 161st St</p>
-              <p className="mt-1 text-sm leading-6 text-muted">Washington Heights, NY 10032 · el mismo local de siempre.</p>
+              <p className="mt-1 text-sm leading-6 text-muted">New York, NY 10032 · Washington Heights local.</p>
             </div>
             <div className="border-l border-line pl-4">
               <Phone className="mb-3 text-accent" size={21} />

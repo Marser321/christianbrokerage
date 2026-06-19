@@ -81,7 +81,7 @@ export function Footer() {
                 <span>
                   Lun-Vie: 9 AM - 5 PM
                   <br />
-                  Sábados (enero–abril): 9 AM - 5 PM
+                  Sábados (Enero–Abril): 10 AM - 3 PM
                 </span>
               </div>
             </div>
