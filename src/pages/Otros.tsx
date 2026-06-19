@@ -1,7 +1,8 @@
 import { ServicePage } from '../components/services/ServicePage'
-import { serviceVerticals } from '../data/serviceCatalog'
+import { useLocalizedServiceVerticals } from '../context/LanguageContext'
 
 export function Otros() {
+  const serviceVerticals = useLocalizedServiceVerticals()
   return <ServicePage vertical={serviceVerticals.otros} />
 }
 

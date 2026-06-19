@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Clock, FileText } from 'lucide-react'
 import type { ServiceItem, ServiceVertical } from '../../data/serviceCatalog'
 import { useVariant } from '../../context/VariantContext'
+import { useLanguage } from '../../context/LanguageContext'
 import { framePos, serviceImage } from '../../data/imageLibrary'
 import { diagnosticoHref } from '../../data/navigationCatalog'
 
@@ -13,17 +14,18 @@ type ServiceCardGridProps = {
 
 export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
   const { density } = useVariant()
+  const { tr } = useLanguage()
 
   return (
     <section id={`servicios-${vertical.slug}`} className="bg-surface-2 py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-3xl md:mb-14">
-          <p className="eyebrow mb-4">Servicios</p>
+          <p className="eyebrow mb-4">{tr('Servicios')}</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-heading md:text-5xl">
-            Elige el trámite o cobertura que necesitas resolver.
+            {tr('Elige el trámite o cobertura que necesitas resolver.')}
           </h2>
           <p className="mt-5 text-base leading-8 text-muted">
-            Cada tarjeta resume lo esencial. El detalle completo queda en una vista lateral para comparar sin saturar la página.
+            {tr('Cada tarjeta resume lo esencial. El detalle completo queda en una vista lateral para comparar sin saturar la página.')}
           </p>
         </div>
 
@@ -96,7 +98,7 @@ export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
                       to={diagnosticoHref(vertical.slug, service.id)}
                       className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Orientarme
+                      {tr('Orientarme')}
                       <ArrowRight size={15} aria-hidden="true" />
                     </Link>
                     <button
@@ -104,7 +106,7 @@ export function ServiceCardGrid({ vertical, onOpen }: ServiceCardGridProps) {
                       onClick={() => onOpen(service)}
                       className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-line px-4 py-2.5 text-sm font-semibold text-heading transition hover:border-accent/50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Ver detalle
+                      {tr('Ver detalle')}
                       <FileText size={15} aria-hidden="true" />
                     </button>
                   </div>

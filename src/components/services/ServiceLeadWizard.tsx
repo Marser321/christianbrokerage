@@ -24,6 +24,7 @@ import {
   officePhoneHref,
   serviceVerticals,
 } from '../../data/serviceCatalog'
+import { useLanguage, useLocalizedServiceVerticals } from '../../context/LanguageContext'
 import { submitLead } from '../../lib/leads'
 import { EASE_BRAND } from '../../lib/motion'
 
@@ -252,25 +253,25 @@ function serviceToOption(vertical: ServiceVertical, service: ServiceItem): Wizar
   }
 }
 
-function createGeneralOption(): WizardServiceOption {
+function createGeneralOption(tr: (text: string) => string): WizardServiceOption {
   return {
     id: null,
     slug: 'unsure',
     icon: MessageCircle,
-    title: 'Orientación general',
-    summary: 'Si todavía no sabes qué servicio corresponde, empezamos por ordenar el caso y ubicar la ruta correcta.',
-    turnaround: 'Primera respuesta el mismo día hábil',
-    requirements: 'Describe el caso, las fechas importantes y los documentos que ya tienes disponibles.',
-    proTip: 'Una buena orientación inicial evita empezar por el formulario, póliza o trámite equivocado.',
+    title: tr('Orientación general'),
+    summary: tr('Si todavía no sabes qué servicio corresponde, empezamos por ordenar el caso y ubicar la ruta correcta.'),
+    turnaround: tr('Primera respuesta el mismo día hábil'),
+    requirements: tr('Describe el caso, las fechas importantes y los documentos que ya tienes disponibles.'),
+    proTip: tr('Una buena orientación inicial evita empezar por el formulario, póliza o trámite equivocado.'),
   }
 }
 
-function contactLabel(value: ContactPreference) {
-  return contactOptions.find((option) => option.value === value)?.label ?? value
+function contactLabel(value: ContactPreference, tr: (text: string) => string = (text) => text) {
+  return tr(contactOptions.find((option) => option.value === value)?.label ?? value)
 }
 
-function timelineLabel(value: Timeline) {
-  return timelineOptions.find((option) => option.value === value)?.label ?? value
+function timelineLabel(value: Timeline, tr: (text: string) => string = (text) => text) {
+  return tr(timelineOptions.find((option) => option.value === value)?.label ?? value)
 }
 
 function inputClass(hasError: boolean) {
@@ -279,27 +280,27 @@ function inputClass(hasError: boolean) {
   }`
 }
 
-function validate(form: FormState) {
+function validate(form: FormState, tr: (text: string) => string) {
   const errors: Partial<Record<FieldName, string>> = {}
   const phonePattern = /^(?:\+?1[\s.-]?)?(?:\(?\d{3}\)?[\s.-]?)\d{3}[\s.-]?\d{4}$/
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-  if (!form.fullName.trim()) errors.fullName = 'Escribe tu nombre completo.'
-  if (!phonePattern.test(form.phone.trim())) errors.phone = 'Usa un teléfono válido de EE.UU.'
-  if (!emailPattern.test(form.email.trim())) errors.email = 'Usa un email válido.'
+  if (!form.fullName.trim()) errors.fullName = tr('Escribe tu nombre completo.')
+  if (!phonePattern.test(form.phone.trim())) errors.phone = tr('Usa un teléfono válido de EE.UU.')
+  if (!emailPattern.test(form.email.trim())) errors.email = tr('Usa un email válido.')
 
   return errors
 }
 
-function createWhatsappMessage(payload: ServiceLeadPayload) {
+function createWhatsappMessage(payload: ServiceLeadPayload, tr: (text: string) => string) {
   const lines = [
-    'Hola, completé el diagnóstico en la web.',
-    `Nombre: ${payload.fullName}`,
-    `Servicio: ${payload.serviceTitle}`,
-    `Preferencia: ${contactLabel(payload.contactPreference)}`,
-    `Urgencia: ${timelineLabel(payload.timeline)}`,
+    tr('Hola, completé el diagnóstico en la web.'),
+    `${tr('Nombre:')} ${payload.fullName}`,
+    `${tr('Servicio:')} ${payload.serviceTitle}`,
+    `${tr('Preferencia:')} ${contactLabel(payload.contactPreference, tr)}`,
+    `${tr('Urgencia:')} ${timelineLabel(payload.timeline, tr)}`,
   ]
-  if (payload.message) lines.push(`Detalle: ${payload.message}`)
+  if (payload.message) lines.push(`${tr('Detalle:')} ${payload.message}`)
   return lines.join('\n')
 }
 
@@ -320,6 +321,12 @@ export function resolveInitialFromParams(area: string | null, servicio: string |
 const defaultInitial: DiagnosticoInitialState = { step: 'situation', slug: 'unsure', serviceId: null }
 
 export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = defaultInitial }: DiagnosticoWizardProps) {
+  const { tr } = useLanguage()
+  const localizedVerticals = useLocalizedServiceVerticals()
+  const localizedVerticalList = useMemo(
+    () => [localizedVerticals.seguros, localizedVerticals.taxes, localizedVerticals.inmigracion, localizedVerticals.otros],
+    [localizedVerticals],
+  )
   const [step, setStep] = useState<Step>(initial.step)
   const [selectedSlug, setSelectedSlug] = useState<WizardSlug>(initial.slug)
   const [selectedServiceId, setSelectedServiceId] = useState<string | null>(initial.serviceId)
@@ -334,14 +341,24 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
   const isFirstStep = useRef(true)
   const reduceMotion = useReducedMotion()
 
-  const selectedMatch = findService(selectedServiceId)
+  const selectedMatch = useMemo(() => {
+    if (!selectedServiceId) return null
+
+    for (const vertical of localizedVerticalList) {
+      const service = vertical.services.find((item) => item.id === selectedServiceId)
+      if (service) return { vertical, service }
+    }
+
+    return null
+  }, [localizedVerticalList, selectedServiceId])
   const selectedVertical = selectedMatch?.vertical ?? null
-  const selectedOption = selectedMatch ? serviceToOption(selectedMatch.vertical, selectedMatch.service) : createGeneralOption()
+  const selectedOption = selectedMatch ? serviceToOption(selectedMatch.vertical, selectedMatch.service) : createGeneralOption(tr)
 
   const serviceOptions = useMemo<WizardServiceOption[]>(() => {
     if (selectedSlug === 'unsure') return []
-    return serviceVerticals[selectedSlug].services.map((service) => serviceToOption(serviceVerticals[selectedSlug], service))
-  }, [selectedSlug])
+    const vertical = localizedVerticals[selectedSlug]
+    return vertical.services.map((service) => serviceToOption(vertical, service))
+  }, [localizedVerticals, selectedSlug])
 
   const visibleServices = showAllServices ? serviceOptions : serviceOptions.slice(0, SERVICE_PREVIEW_COUNT)
   const hiddenCount = serviceOptions.length - visibleServices.length
@@ -397,7 +414,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const nextErrors = validate(form)
+    const nextErrors = validate(form, tr)
     setErrors(nextErrors)
 
     const firstError = (Object.keys(nextErrors) as FieldName[])[0]
@@ -427,15 +444,15 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
   }
 
   const directWhatsappHref = createWhatsappHref(
-    selectedOption.title && selectedOption.title !== 'Orientación general'
-      ? `Hola, necesito orientación de Christian Brokerage sobre ${selectedOption.title}.`
-      : 'Hola, necesito orientación de Christian Brokerage.',
+    selectedOption.title && selectedOption.title !== tr('Orientación general')
+      ? `${tr('Hola, necesito orientación de Christian Brokerage sobre')} ${selectedOption.title}.`
+      : tr('Hola, necesito orientación de Christian Brokerage.'),
   )
   const bookingHref = selectedVertical ? `/${selectedVertical.slug}#${selectedVertical.bookingAnchor}` : '/#contacto'
   const firstName = submittedPayload?.fullName.split(' ')[0] ?? ''
 
   const headingText =
-    step === 'service' && selectedSlug === 'unsure' ? 'Cuéntanos un poco más' : stepTitle[step]
+    step === 'service' && selectedSlug === 'unsure' ? tr('Cuéntanos un poco más') : tr(stepTitle[step])
   const progress = step === 'done' ? 4 : stepProgress[step]
 
   const transition = reduceMotion ? { duration: 0 } : { duration: 0.32, ease: EASE_BRAND }
@@ -459,12 +476,14 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                 className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-semibold text-muted transition hover:text-heading focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 <ArrowLeft size={16} aria-hidden="true" />
-                Atrás
+                {tr('Atrás')}
               </button>
             ) : (
-              <span className="text-sm font-semibold text-muted">Diagnóstico</span>
+              <span className="text-sm font-semibold text-muted">{tr('Diagnóstico')}</span>
             )}
-            <span className="text-xs font-semibold uppercase tracking-wide text-muted">Paso {progress} de 4</span>
+            <span className="text-xs font-semibold uppercase tracking-wide text-muted">
+              {tr('Paso')} {progress} {tr('de')} 4
+            </span>
           </div>
           <div
             className="mt-3 flex gap-1.5"
@@ -472,7 +491,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
             aria-valuenow={progress}
             aria-valuemin={1}
             aria-valuemax={4}
-            aria-valuetext={`Paso ${progress} de 4: ${headingText}`}
+            aria-valuetext={`${tr('Paso')} ${progress} ${tr('de')} 4: ${headingText}`}
           >
             {[1, 2, 3, 4].map((segment) => (
               <span
@@ -485,7 +504,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
       ) : null}
 
       <p className="sr-only" aria-live="polite">
-        {step !== 'done' ? `Paso ${progress} de 4: ${headingText}` : 'Diagnóstico completado.'}
+        {step !== 'done' ? `${tr('Paso')} ${progress} ${tr('de')} 4: ${headingText}` : tr('Diagnóstico completado.')}
       </p>
 
       <div className="px-5 py-7 md:px-8 md:py-9">
@@ -493,19 +512,19 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
           <motion.div key={step} {...motionProps} transition={transition}>
             {step === 'situation' ? (
               <div>
-                <p className="eyebrow mb-3">Paso 1</p>
+                <p className="eyebrow mb-3">{tr('Paso 1')}</p>
                 <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="text-2xl font-serif font-semibold leading-tight text-heading outline-none md:text-3xl">
-                  ¿Qué necesitas resolver?
+                  {tr('¿Qué necesitas resolver?')}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-muted">
-                  Elige lo que más se parezca a tu caso. Si no estás seguro, no importa: hay una opción para eso.
+                  {tr('Elige lo que más se parezca a tu caso. Si no estás seguro, no importa: hay una opción para eso.')}
                 </p>
                 <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">
                   {situationCards.map((card) => (
-                    <SituationButton key={card.slug} card={card} active={selectedSlug === card.slug} onClick={() => selectSituation(card.slug)} />
+                    <SituationButton key={card.slug} card={card} active={selectedSlug === card.slug} onClick={() => selectSituation(card.slug)} tr={tr} />
                   ))}
                   <div className="sm:col-span-2">
-                    <SituationButton card={unsureCard} active={selectedSlug === 'unsure'} dashed onClick={() => selectSituation('unsure')} />
+                    <SituationButton card={unsureCard} active={selectedSlug === 'unsure'} dashed onClick={() => selectSituation('unsure')} tr={tr} />
                   </div>
                 </div>
               </div>
@@ -513,7 +532,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
             {step === 'service' ? (
               <div>
-                <p className="eyebrow mb-3">Paso 2</p>
+                <p className="eyebrow mb-3">{tr('Paso 2')}</p>
                 <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="text-2xl font-serif font-semibold leading-tight text-heading outline-none md:text-3xl">
                   {headingText}
                 </h2>
@@ -521,13 +540,13 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                 {selectedSlug === 'unsure' ? (
                   <div className="mt-4">
                     <p className="text-sm leading-7 text-muted">
-                      En una o dos frases, ¿qué necesitas? (opcional) Con eso preparamos tu orientación.
+                      {tr('En una o dos frases, ¿qué necesitas? (opcional) Con eso preparamos tu orientación.')}
                     </p>
                     <textarea
                       rows={4}
                       value={form.message}
                       onChange={(event) => updateForm('message', event.target.value)}
-                      placeholder="Ej. Me llegó una carta, tengo una renovación, o quiero abrir un negocio…"
+                      placeholder={tr('Ej. Me llegó una carta, tengo una renovación, o quiero abrir un negocio…')}
                       className="mt-3 w-full resize-y rounded-md border border-line bg-surface-card px-3 py-3 text-sm leading-6 text-heading transition placeholder:text-muted/65 hover:border-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     />
                     <button
@@ -535,13 +554,13 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                       onClick={chooseGeneral}
                       className="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Ver qué recomendamos
+                      {tr('Ver qué recomendamos')}
                       <ArrowRight size={16} aria-hidden="true" />
                     </button>
                   </div>
                 ) : (
                   <div className="mt-4">
-                    <p className="text-sm leading-7 text-muted">{serviceStepHelper[selectedSlug]}</p>
+                    <p className="text-sm leading-7 text-muted">{tr(serviceStepHelper[selectedSlug])}</p>
                     <div className="mt-4 space-y-2">
                       {visibleServices.map((option) => (
                         <ServiceRow key={`${option.slug}-${option.id}`} option={option} onClick={() => selectService(option)} />
@@ -553,7 +572,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                         onClick={() => setShowAllServices(true)}
                         className="mt-3 text-sm font-semibold text-accent underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                       >
-                        Ver más opciones (+{hiddenCount})
+                        {tr('Ver más opciones')} (+{hiddenCount})
                       </button>
                     ) : null}
                     <button
@@ -562,7 +581,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                       className="mt-4 flex w-full items-center gap-3 rounded-md border border-dashed border-line bg-surface px-4 py-3 text-left text-sm text-muted transition hover:border-accent/45 hover:text-heading focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
                       <MessageCircle size={17} className="shrink-0 text-accent" aria-hidden="true" />
-                      No sé cuál es — prefiero que me orienten
+                      {tr('No sé cuál es — prefiero que me orienten')}
                     </button>
                   </div>
                 )}
@@ -571,7 +590,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
             {step === 'result' ? (
               <div>
-                <p className="eyebrow mb-3">Esto es lo que recomendamos</p>
+                <p className="eyebrow mb-3">{tr('Esto es lo que recomendamos')}</p>
                 <div className="rounded-lg border border-line bg-surface p-5 md:p-6">
                   <div className="flex items-start justify-between gap-4">
                     <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="font-serif text-2xl font-semibold leading-tight text-heading outline-none">
@@ -583,12 +602,12 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                   <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <div className="rounded-md border border-line bg-surface-card p-4">
                       <Clock className="mb-3 text-accent" size={18} aria-hidden="true" />
-                      <p className="font-sans text-xs font-semibold uppercase text-heading">Tiempo estimado</p>
+                      <p className="font-sans text-xs font-semibold uppercase text-heading">{tr('Tiempo estimado')}</p>
                       <p className="mt-2 text-sm leading-6 text-muted">{selectedOption.turnaround}</p>
                     </div>
                     <div className="rounded-md border border-line bg-surface-card p-4">
                       <FileText className="mb-3 text-accent" size={18} aria-hidden="true" />
-                      <p className="font-sans text-xs font-semibold uppercase text-heading">Documentos base</p>
+                      <p className="font-sans text-xs font-semibold uppercase text-heading">{tr('Documentos base')}</p>
                       <p className="mt-2 text-sm leading-6 text-muted">{selectedOption.requirements}</p>
                     </div>
                   </div>
@@ -602,7 +621,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                     onClick={() => setStep('timeline')}
                     className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    Sí, esto es — continuar
+                    {tr('Sí, esto es — continuar')}
                     <ArrowRight size={16} aria-hidden="true" />
                   </button>
                   <button
@@ -610,7 +629,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                     onClick={goBack}
                     className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-line px-5 py-3 text-sm font-semibold text-heading transition hover:border-accent/50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                   >
-                    No era esto — ver otras opciones
+                    {tr('No era esto — ver otras opciones')}
                   </button>
                 </div>
               </div>
@@ -618,11 +637,11 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
             {step === 'timeline' ? (
               <div>
-                <p className="eyebrow mb-3">Paso 3</p>
+                <p className="eyebrow mb-3">{tr('Paso 3')}</p>
                 <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="text-2xl font-serif font-semibold leading-tight text-heading outline-none md:text-3xl">
-                  ¿Para cuándo lo necesitas?
+                  {tr('¿Para cuándo lo necesitas?')}
                 </h2>
-                <div className="mt-5" role="group" aria-label="Urgencia">
+                <div className="mt-5" role="group" aria-label={tr('Urgencia')}>
                   <div className="flex flex-wrap gap-2">
                     {timelineOptions.map((option) => (
                       <button
@@ -630,21 +649,21 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                         type="button"
                         aria-pressed={form.timeline === option.value}
                         onClick={() => updateForm('timeline', option.value)}
-                        title={option.desc}
+                        title={tr(option.desc)}
                         className={`min-h-11 rounded-md border px-4 text-sm font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent ${
                           form.timeline === option.value
                             ? 'border-accent bg-accent/10 text-heading'
                             : 'border-line text-muted hover:border-accent/45 hover:text-heading'
                         }`}
                       >
-                        {option.label}
+                        {tr(option.label)}
                       </button>
                     ))}
                   </div>
                 </div>
 
-                <h3 className="mt-7 font-sans text-sm font-semibold text-heading">¿Cómo prefieres que te contactemos?</h3>
-                <div className="mt-3" role="group" aria-label="Preferencia de contacto">
+                <h3 className="mt-7 font-sans text-sm font-semibold text-heading">{tr('¿Cómo prefieres que te contactemos?')}</h3>
+                <div className="mt-3" role="group" aria-label={tr('Preferencia de contacto')}>
                   <div className="flex flex-wrap gap-2">
                     {contactOptions.map((option) => (
                       <button
@@ -658,7 +677,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                             : 'border-line text-muted hover:border-accent/45 hover:text-heading'
                         }`}
                       >
-                        {option.label}
+                        {tr(option.label)}
                       </button>
                     ))}
                   </div>
@@ -669,7 +688,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                   onClick={() => setStep('contact')}
                   className="mt-8 inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  Continuar
+                  {tr('Continuar')}
                   <ArrowRight size={16} aria-hidden="true" />
                 </button>
               </div>
@@ -677,18 +696,18 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
             {step === 'contact' ? (
               <form noValidate onSubmit={handleSubmit}>
-                <p className="eyebrow mb-3">Paso 4</p>
+                <p className="eyebrow mb-3">{tr('Paso 4')}</p>
                 <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="text-2xl font-serif font-semibold leading-tight text-heading outline-none md:text-3xl">
-                  Último paso: ¿a quién contactamos?
+                  {tr('Último paso: ¿a quién contactamos?')}
                 </h2>
                 <p className="mt-3 text-sm leading-7 text-muted">
-                  Solo usamos estos datos para responderte sobre tu caso. Sin spam.
+                  {tr('Solo usamos estos datos para responderte sobre tu caso. Sin spam.')}
                 </p>
 
                 <div className="mt-5 space-y-4">
                   <div>
                     <label htmlFor={`${id}-fullName`} className="font-sans text-sm font-semibold text-heading">
-                      Nombre completo
+                      {tr('Nombre completo')}
                     </label>
                     <input
                       ref={(node) => {
@@ -714,7 +733,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div>
                       <label htmlFor={`${id}-phone`} className="font-sans text-sm font-semibold text-heading">
-                        Teléfono móvil
+                        {tr('Teléfono móvil')}
                       </label>
                       <input
                         ref={(node) => {
@@ -741,7 +760,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
                     <div>
                       <label htmlFor={`${id}-email`} className="font-sans text-sm font-semibold text-heading">
-                        Email
+                        {tr('Email')}
                       </label>
                       <input
                         ref={(node) => {
@@ -770,7 +789,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
                   <div>
                     <label htmlFor={`${id}-message`} className="font-sans text-sm font-semibold text-heading">
-                      ¿Algo que debamos saber? (opcional)
+                      {tr('¿Algo que debamos saber? (opcional)')}
                     </label>
                     <textarea
                       id={`${id}-message`}
@@ -778,18 +797,18 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                       rows={3}
                       value={form.message}
                       onChange={(event) => updateForm('message', event.target.value)}
-                      placeholder="Ej. tengo una carta, una renovación o una fecha límite…"
+                      placeholder={tr('Ej. tengo una carta, una renovación o una fecha límite…')}
                       className="mt-2 w-full resize-y rounded-md border border-line bg-surface-card px-3 py-3 text-sm leading-6 text-heading transition placeholder:text-muted/65 hover:border-accent/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     />
                   </div>
                 </div>
 
                 <div className="mt-6 rounded-md border border-line bg-surface-2 p-4 text-sm">
-                  <p className="font-sans text-xs font-semibold uppercase tracking-wide text-muted">Tu resumen</p>
+                  <p className="font-sans text-xs font-semibold uppercase tracking-wide text-muted">{tr('Tu resumen')}</p>
                   <dl className="mt-3 space-y-2">
-                    <SummaryRow label="Servicio" value={selectedOption.title} onEdit={() => setStep('situation')} />
-                    <SummaryRow label="Urgencia" value={timelineLabel(form.timeline)} onEdit={() => setStep('timeline')} />
-                    <SummaryRow label="Contacto" value={contactLabel(form.contactPreference)} onEdit={() => setStep('timeline')} />
+                    <SummaryRow label={tr('Servicio')} value={selectedOption.title} onEdit={() => setStep('situation')} tr={tr} />
+                    <SummaryRow label={tr('Urgencia')} value={timelineLabel(form.timeline, tr)} onEdit={() => setStep('timeline')} tr={tr} />
+                    <SummaryRow label={tr('Contacto')} value={contactLabel(form.contactPreference, tr)} onEdit={() => setStep('timeline')} tr={tr} />
                   </dl>
                 </div>
 
@@ -800,20 +819,19 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                 >
                   {status === 'submitting' ? (
                     <>
-                      Enviando…
+                      {tr('Enviando…')}
                       <Loader2 size={16} className="animate-spin" aria-hidden="true" />
                     </>
                   ) : (
                     <>
-                      Enviar y recibir respuesta
+                      {tr('Enviar y recibir respuesta')}
                       <Send size={16} aria-hidden="true" />
                     </>
                   )}
                 </button>
 
                 <p className="mt-3 text-xs leading-5 text-muted">
-                  Al enviar aceptas que te contactemos sobre tu consulta. No compartimos tus datos con terceros ni te
-                  suscribimos a nada.
+                  {tr('Al enviar aceptas que te contactemos sobre tu consulta. No compartimos tus datos con terceros ni te suscribimos a nada.')}
                 </p>
               </form>
             ) : null}
@@ -826,13 +844,13 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                       <CheckCircle2 size={30} aria-hidden="true" />
                     </span>
                     <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="mt-5 font-serif text-2xl font-semibold leading-tight text-heading outline-none md:text-3xl">
-                      ¡Listo{firstName ? `, ${firstName}` : ''}! Recibimos tu caso.
+                      {firstName ? `${tr('¡Listo')}, ${firstName}! ${tr('Recibimos tu caso.')}` : `${tr('¡Listo!')} ${tr('Recibimos tu caso.')}`}
                     </h2>
                     <p className="mt-3 text-sm leading-7 text-muted">
-                      Te vamos a contactar por {contactLabel(submittedPayload?.contactPreference ?? 'whatsapp')} para ayudarte
-                      con “{submittedPayload?.serviceTitle}”. Solemos responder el mismo día hábil, en español.
+                      {tr('Te vamos a contactar por')} {contactLabel(submittedPayload?.contactPreference ?? 'whatsapp', tr)} {tr('para ayudarte con')}{' '}
+                      “{submittedPayload?.serviceTitle}”. {tr('Solemos responder el mismo día hábil, en español.')}
                     </p>
-                    <p className="mt-4 text-sm font-semibold text-heading">¿Prefieres adelantar? Estos son los siguientes pasos:</p>
+                    <p className="mt-4 text-sm font-semibold text-heading">{tr('¿Prefieres adelantar? Estos son los siguientes pasos:')}</p>
                   </>
                 ) : (
                   <>
@@ -840,23 +858,22 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                       <MessageCircle size={28} aria-hidden="true" />
                     </span>
                     <h2 ref={headingRef} tabIndex={-1} id={`${id}-title`} className="mt-5 font-serif text-2xl font-semibold leading-tight text-heading outline-none md:text-3xl">
-                      Casi listo — terminemos por WhatsApp.
+                      {tr('Casi listo — terminemos por WhatsApp.')}
                     </h2>
                     <p className="mt-3 text-sm leading-7 text-muted">
-                      Tu resumen está preparado. Para asegurarnos de no perder tu caso, toca el botón y nos llega al instante
-                      con todo el contexto.
+                      {tr('Tu resumen está preparado. Para asegurarnos de no perder tu caso, toca el botón y nos llega al instante con todo el contexto.')}
                     </p>
                   </>
                 )}
 
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <a
-                    href={submittedPayload ? createWhatsappHref(createWhatsappMessage(submittedPayload)) : directWhatsappHref}
+                    href={submittedPayload ? createWhatsappHref(createWhatsappMessage(submittedPayload, tr)) : directWhatsappHref}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#20ba59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#25D366]"
                   >
-                    {status === 'success' ? 'Enviar resumen por WhatsApp' : 'Continuar por WhatsApp'}
+                    {status === 'success' ? tr('Enviar resumen por WhatsApp') : tr('Continuar por WhatsApp')}
                     <MessageCircle size={16} aria-hidden="true" />
                   </a>
                   {status === 'success' ? (
@@ -864,7 +881,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                       href={bookingHref}
                       className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-line px-5 py-3 text-sm font-semibold text-heading transition hover:border-accent/50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Agendar una llamada
+                      {tr('Agendar una llamada')}
                       <CalendarDays size={16} aria-hidden="true" />
                     </a>
                   ) : (
@@ -872,7 +889,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
                       href={officePhoneHref}
                       className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-line px-5 py-3 text-sm font-semibold text-heading transition hover:border-accent/50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Llamar {officePhoneDisplay}
+                      {tr('Llamar')} {officePhoneDisplay}
                       <Phone size={16} aria-hidden="true" />
                     </a>
                   )}
@@ -885,7 +902,7 @@ export function DiagnosticoWizard({ id = 'diagnostico-wizard', initial = default
 
       {step !== 'done' ? (
         <div className="flex flex-col gap-2 border-t border-line bg-surface px-5 py-4 text-sm text-muted sm:flex-row sm:items-center sm:justify-between md:px-7">
-          <span>¿Prefieres hablar directo?</span>
+          <span>{tr('¿Prefieres hablar directo?')}</span>
           <div className="flex flex-wrap gap-4">
             <a
               href={directWhatsappHref}
@@ -919,7 +936,19 @@ const stepTitle: Record<Step, string> = {
   done: 'Diagnóstico completado',
 }
 
-function SituationButton({ card, active, dashed = false, onClick }: { card: SituationCard; active: boolean; dashed?: boolean; onClick: () => void }) {
+function SituationButton({
+  card,
+  active,
+  dashed = false,
+  onClick,
+  tr,
+}: {
+  card: SituationCard
+  active: boolean
+  dashed?: boolean
+  onClick: () => void
+  tr: (text: string) => string
+}) {
   const Icon = card.icon
   return (
     <button
@@ -936,9 +965,9 @@ function SituationButton({ card, active, dashed = false, onClick }: { card: Situ
         <Icon size={19} aria-hidden="true" />
       </span>
       <span className="min-w-0">
-        <span className="block font-sans text-sm font-semibold leading-snug text-heading">{card.label}</span>
-        <span className="mt-1 block text-xs leading-5 text-muted">{card.desc}</span>
-        <span className="mt-2 inline-block text-[11px] font-semibold uppercase tracking-wide text-accent/80">{card.tag}</span>
+        <span className="block font-sans text-sm font-semibold leading-snug text-heading">{tr(card.label)}</span>
+        <span className="mt-1 block text-xs leading-5 text-muted">{tr(card.desc)}</span>
+        <span className="mt-2 inline-block text-[11px] font-semibold uppercase tracking-wide text-accent/80">{tr(card.tag)}</span>
       </span>
     </button>
   )
@@ -964,7 +993,7 @@ function ServiceRow({ option, onClick }: { option: WizardServiceOption; onClick:
   )
 }
 
-function SummaryRow({ label, value, onEdit }: { label: string; value: string; onEdit: () => void }) {
+function SummaryRow({ label, value, onEdit, tr }: { label: string; value: string; onEdit: () => void; tr: (text: string) => string }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
       <dt className="shrink-0 text-muted">{label}</dt>
@@ -975,7 +1004,7 @@ function SummaryRow({ label, value, onEdit }: { label: string; value: string; on
           onClick={onEdit}
           className="shrink-0 text-xs font-semibold text-accent underline-offset-2 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
         >
-          Editar
+          {tr('Editar')}
         </button>
       </dd>
     </div>

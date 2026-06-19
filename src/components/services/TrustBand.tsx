@@ -1,13 +1,16 @@
 import { motion } from 'framer-motion'
 import type { TrustPoint } from '../../data/serviceCatalog'
+import { useLanguage } from '../../context/LanguageContext'
 
 type TrustBandProps = {
   items: TrustPoint[]
 }
 
 export function TrustBand({ items }: TrustBandProps) {
+  const { tr } = useLanguage()
+
   return (
-    <section className="border-y border-line bg-surface-card/70 py-6" aria-label="Puntos de confianza">
+    <section className="border-y border-line bg-surface-card/70 py-6" aria-label={tr('Puntos de confianza')}>
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-5 sm:px-6 md:grid-cols-3 lg:px-8">
         {items.map((item, index) => (
           <motion.div

@@ -5,6 +5,7 @@ import { Hero } from '../components/sections/Hero'
 import { NumberTicker } from '../components/ui/NumberTicker'
 import { fadeUp, staggerContainer, staggerItem, viewportOnce } from '../lib/motion'
 import { useVariant } from '../context/VariantContext'
+import { useLanguage, useLocalizedServiceVerticals } from '../context/LanguageContext'
 import { mainCardFramePos, mainCardImage, realPhotoFramePos } from '../data/imageLibrary'
 import { diagnosticoHref, homeServicePreviewCount, serviceHref } from '../data/navigationCatalog'
 import christianReal from '../assets/images/real/christian-real.jpg'
@@ -14,11 +15,8 @@ import {
   createWhatsappHref,
   officePhoneDisplay,
   officePhoneHref,
-  serviceVerticals,
 } from '../data/serviceCatalog'
 import { getCalendarSrc } from '../lib/calendar'
-
-const verticals = [serviceVerticals.seguros, serviceVerticals.taxes, serviceVerticals.inmigracion]
 
 const processSteps = [
   'Escuchamos el caso y pedimos solo documentos relevantes.',
@@ -29,14 +27,17 @@ const processSteps = [
 
 function HomeServices() {
   const { density } = useVariant()
+  const { tr } = useLanguage()
+  const localizedVerticals = useLocalizedServiceVerticals()
+  const verticals = [localizedVerticals.seguros, localizedVerticals.taxes, localizedVerticals.inmigracion]
 
   return (
     <section id="servicios" className="bg-surface-2 py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-3xl md:mb-14">
-          <p className="eyebrow mb-4">Servicios principales</p>
+          <p className="eyebrow mb-4">{tr('Servicios principales')}</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-heading md:text-5xl">
-            Tres áreas, un mismo estándar: claridad documental y atención humana.
+            {tr('Tres áreas, un mismo estándar: claridad documental y atención humana.')}
           </h2>
         </div>
 
@@ -86,14 +87,14 @@ function HomeServices() {
                       to={diagnosticoHref(vertical.slug)}
                       className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Orientarme
+                      {tr('Orientarme')}
                       <ArrowRight size={16} aria-hidden="true" />
                     </Link>
                     <Link
                       to={`/${vertical.slug}`}
                       className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-md border border-line px-4 py-2.5 text-sm font-semibold text-heading transition hover:border-accent/50 hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                     >
-                      Explorar
+                      {tr('Explorar')}
                       <ArrowRight size={16} aria-hidden="true" />
                     </Link>
                   </div>
@@ -109,27 +110,29 @@ function HomeServices() {
 }
 
 function OfficeProof() {
+  const { tr } = useLanguage()
+
   return (
     <section id="nosotros" className="bg-surface py-16 md:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-5 sm:px-6 lg:grid-cols-12 lg:items-center lg:px-8">
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="lg:col-span-5">
-          <p className="eyebrow mb-4">Nosotros</p>
+          <p className="eyebrow mb-4">{tr('Nosotros')}</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-heading md:text-5xl">
-            Más de 30 años de experiencia, en el mismo local de Washington Heights.
+            {tr('Más de 30 años de experiencia, en el mismo local de Washington Heights.')}
           </h2>
           <p className="mt-5 text-base leading-8 text-muted">
-            Christian Brokerage es un negocio con raíces en la comunidad latina de Nueva York: atención presencial, certificaciones a la vista y un trato directo en español. Más de tres décadas en servicios financieros y administrativos, desde la misma oficina de siempre.
+            {tr('Christian Brokerage es un negocio con raíces en la comunidad latina de Nueva York: atención presencial, certificaciones a la vista y un trato directo en español. Más de tres décadas en servicios financieros y administrativos, desde la misma oficina de siempre.')}
           </p>
           <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="border-l border-line pl-4">
               <Building2 className="mb-3 text-accent" size={21} />
               <p className="font-sans text-sm font-semibold text-heading">501 W 161st St</p>
-              <p className="mt-1 text-sm leading-6 text-muted">New York, NY 10032 · Washington Heights local.</p>
+              <p className="mt-1 text-sm leading-6 text-muted">{tr('New York, NY 10032 · Washington Heights local.')}</p>
             </div>
             <div className="border-l border-line pl-4">
               <Phone className="mb-3 text-accent" size={21} />
               <p className="font-sans text-sm font-semibold text-heading">{officePhoneDisplay}</p>
-              <p className="mt-1 text-sm leading-6 text-muted">Teléfono, WhatsApp y atención en español.</p>
+              <p className="mt-1 text-sm leading-6 text-muted">{tr('Teléfono, WhatsApp y atención en español.')}</p>
             </div>
           </div>
         </motion.div>
@@ -153,9 +156,9 @@ function OfficeProof() {
             />
             <figcaption className="p-5">
               <p className="font-sans text-base font-semibold text-heading">Christian Eduardo</p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent">Fundador · Preparación de impuestos (EA)</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent">{tr('Fundador · Preparación de impuestos (EA)')}</p>
               <p className="mt-3 text-sm leading-6 text-muted">
-                Cuenta con amplia experiencia en la preparación de impuestos y gestión administrativa, con énfasis en precisión y cumplimiento.
+                {tr('Cuenta con amplia experiencia en la preparación de impuestos y gestión administrativa, con énfasis en precisión y cumplimiento.')}
               </p>
             </figcaption>
           </motion.figure>
@@ -171,9 +174,9 @@ function OfficeProof() {
             />
             <figcaption className="p-5">
               <p className="font-sans text-base font-semibold text-heading">Damaris Escalante</p>
-              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent">Coordinadora de Servicios · Seguros e Inmigración</p>
+              <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-accent">{tr('Coordinadora de Servicios · Seguros e Inmigración')}</p>
               <p className="mt-3 text-sm leading-6 text-muted">
-                Con más de 25 años de experiencia, ha desarrollado su trayectoria trabajando de forma directa con clientes, especialmente dentro de la comunidad latina de Washington Heights.
+                {tr('Con más de 25 años de experiencia, ha desarrollado su trayectoria trabajando de forma directa con clientes, especialmente dentro de la comunidad latina de Washington Heights.')}
               </p>
             </figcaption>
           </motion.figure>
@@ -184,6 +187,8 @@ function OfficeProof() {
 }
 
 function ProcessBand() {
+  const { tr } = useLanguage()
+
   return (
     <section id="valores" className="border-y border-line bg-surface-card py-12 md:py-16">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
@@ -197,7 +202,7 @@ function ProcessBand() {
           {processSteps.map((step, index) => (
             <motion.div variants={staggerItem} key={step} className="border-l border-line pl-5">
               <NumberTicker value={index + 1} className="font-serif text-3xl font-semibold text-accent" />
-              <p className="mt-3 text-sm leading-7 text-body">{step}</p>
+              <p className="mt-3 text-sm leading-7 text-body">{tr(step)}</p>
             </motion.div>
           ))}
         </motion.div>
@@ -208,21 +213,22 @@ function ProcessBand() {
 
 function HomeBooking() {
   const calendarSrc = getCalendarSrc('VITE_GHL_CALENDAR_HOME', 'home')
+  const { tr } = useLanguage()
 
   return (
     <section id="contacto" className="booking-navy overflow-hidden bg-surface-invert py-16 text-white md:py-24">
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-5 sm:px-6 lg:grid-cols-12 lg:px-8">
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce} className="lg:col-span-5">
-          <p className="eyebrow mb-4 text-accent">Contacto</p>
+          <p className="eyebrow mb-4 text-accent">{tr('Contacto')}</p>
           <h2 className="text-3xl font-serif font-semibold leading-tight text-white md:text-5xl">
-            Empecemos por ordenar tu caso.
+            {tr('Empecemos por ordenar tu caso.')}
           </h2>
           <p className="mt-5 text-base leading-8 text-white/75">
-            Escríbenos qué necesitas resolver y qué documentos tienes a mano. Te orientamos hacia el servicio correcto sin hacerte repetir la historia tres veces.
+            {tr('Escríbenos qué necesitas resolver y qué documentos tienes a mano. Te orientamos hacia el servicio correcto sin hacerte repetir la historia tres veces.')}
           </p>
           <div className="mt-8 flex flex-col gap-3 sm:flex-row lg:flex-col xl:flex-row">
             <a
-              href={createWhatsappHref('Hola, quiero agendar una orientación con Christian Brokerage.')}
+              href={createWhatsappHref(tr('Hola, quiero agendar una orientación con Christian Brokerage.'))}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md bg-[#25D366] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#20ba59] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
@@ -247,8 +253,8 @@ function HomeBooking() {
               loading="lazy"
             />
             <figcaption className="text-sm leading-6 text-white/75">
-              <span className="block font-semibold text-white">Te atiende Damaris Escalante</span>
-              Enrolled Agent (EA) · atención bilingüe en español.
+              <span className="block font-semibold text-white">{tr('Te atiende Damaris Escalante')}</span>
+              {tr('Enrolled Agent (EA) · atención bilingüe en español.')}
             </figcaption>
           </figure>
         </motion.div>
@@ -264,7 +270,7 @@ function HomeBooking() {
             {calendarSrc ? (
               <iframe
                 src={calendarSrc}
-                title="Calendario Christian Brokerage"
+                title={tr('Calendario Christian Brokerage')}
                 id="ghl-calendar-home"
                 className="h-[720px] w-full border-0"
                 scrolling="no"
@@ -274,18 +280,18 @@ function HomeBooking() {
                 <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-md bg-accent/10 text-accent">
                   <CalendarDays size={26} />
                 </div>
-                <h3 className="font-sans text-xl font-semibold text-heading">Coordinamos la cita directamente</h3>
+                <h3 className="font-sans text-xl font-semibold text-heading">{tr('Coordinamos la cita directamente')}</h3>
                 <p className="mt-3 max-w-md text-sm leading-7 text-muted">
-                  Mientras conectamos la agenda pública, la vía más rápida es WhatsApp o una llamada a la oficina.
+                  {tr('Mientras conectamos la agenda pública, la vía más rápida es WhatsApp o una llamada a la oficina.')}
                 </p>
                 <a
-                  href={createWhatsappHref('Hola, quiero reservar una cita con Christian Brokerage.')}
+                  href={createWhatsappHref(tr('Hola, quiero reservar una cita con Christian Brokerage.'))}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="mt-6 inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-[#25D366] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#20ba59]"
                 >
                   <MessageCircle size={16} />
-                  Reservar por WhatsApp
+                  {tr('Reservar por WhatsApp')}
                 </a>
               </div>
             )}

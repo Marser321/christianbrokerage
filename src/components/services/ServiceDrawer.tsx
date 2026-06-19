@@ -5,6 +5,7 @@ import { AlertTriangle, ArrowRight, Check, Clock, FileText, MessageCircle, X } f
 import type { ServiceItem, ServiceVertical } from '../../data/serviceCatalog'
 import { createWhatsappHref } from '../../data/serviceCatalog'
 import { useVariant } from '../../context/VariantContext'
+import { useLanguage } from '../../context/LanguageContext'
 import { framePos, serviceImage } from '../../data/imageLibrary'
 import { diagnosticoHref } from '../../data/navigationCatalog'
 
@@ -30,6 +31,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
   const activeTab = tabState.serviceId === service?.id ? tabState.tab : 'overview'
   const selectTab = (tab: DrawerTab) => setTabState({ serviceId: service?.id ?? null, tab })
   const { density } = useVariant()
+  const { tr } = useLanguage()
 
   useEffect(() => {
     if (!service) return
@@ -54,7 +56,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
         <div className="fixed inset-0 z-[70] flex justify-end">
           <motion.button
             type="button"
-            aria-label="Cerrar detalle"
+            aria-label={tr('Cerrar detalle')}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -89,7 +91,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
               <button
                 type="button"
                 onClick={onClose}
-                aria-label="Cerrar"
+                aria-label={tr('Cerrar')}
                 className="absolute right-4 top-4 flex h-10 w-10 items-center justify-center rounded-md border border-line bg-surface-card/85 text-heading backdrop-blur transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
               >
                 <X size={18} aria-hidden="true" />
@@ -97,7 +99,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
             </div>
 
             <div className="sticky top-0 z-20 border-b border-line bg-surface/95 px-5 py-3 backdrop-blur md:px-8">
-              <div className="flex gap-2 overflow-x-auto" role="tablist" aria-label="Detalle del servicio">
+              <div className="flex gap-2 overflow-x-auto" role="tablist" aria-label={tr('Detalle del servicio')}>
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
@@ -111,7 +113,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                         : 'border border-line bg-surface-card text-muted hover:border-accent/40 hover:text-heading'
                     }`}
                   >
-                    {tab.label}
+                    {tr(tab.label)}
                   </button>
                 ))}
               </div>
@@ -128,11 +130,11 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
               {activeTab === 'overview' ? (
                 <div className="space-y-8">
                   <section>
-                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">Qué es</h3>
+                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">{tr('Qué es')}</h3>
                     <p className="text-base leading-8 text-body">{service.glossaryDefinition}</p>
                   </section>
                   <section>
-                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">Quién suele necesitarlo</h3>
+                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">{tr('Quién suele necesitarlo')}</h3>
                     <ul className="space-y-3">
                       {service.whoNeedsIt.map((item) => (
                         <li key={item} className="flex gap-3 text-sm leading-7 text-body">
@@ -143,7 +145,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                     </ul>
                   </section>
                   <section>
-                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">Paso a paso</h3>
+                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">{tr('Paso a paso')}</h3>
                     <ol className="space-y-3">
                       {service.howItWorks.map((step, index) => (
                         <li key={step} className="flex gap-3 text-sm leading-7 text-body">
@@ -163,20 +165,20 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                   <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                     <div className="rounded-lg border border-line bg-surface-card p-5">
                       <Clock className="mb-3 text-accent" size={20} aria-hidden="true" />
-                      <h3 className="font-sans text-sm font-semibold text-heading">Tiempo estimado</h3>
+                      <h3 className="font-sans text-sm font-semibold text-heading">{tr('Tiempo estimado')}</h3>
                       <p className="mt-2 text-sm leading-6 text-muted">{service.turnaround}</p>
                     </div>
                     <div className="rounded-lg border border-line bg-surface-card p-5">
                       <FileText className="mb-3 text-accent" size={20} aria-hidden="true" />
-                      <h3 className="font-sans text-sm font-semibold text-heading">Documentos base</h3>
+                      <h3 className="font-sans text-sm font-semibold text-heading">{tr('Documentos base')}</h3>
                       <p className="mt-2 text-sm leading-6 text-muted">{service.requirements}</p>
                       <p className="mt-2 text-xs leading-5 text-muted/80">
-                        Después de tu consulta podríamos solicitar información o documentos adicionales según tu caso.
+                        {tr('Después de tu consulta podríamos solicitar información o documentos adicionales según tu caso.')}
                       </p>
                     </div>
                   </div>
                   <section>
-                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">Incluye</h3>
+                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">{tr('Incluye')}</h3>
                     <ul className="space-y-3">
                       {service.premiumInclusions.map((item) => (
                         <li key={item} className="flex gap-3 rounded-md bg-surface-card px-4 py-3 text-sm leading-7 text-body">
@@ -192,11 +194,11 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
               {activeTab === 'risks' ? (
                 <div className="space-y-7">
                   <section className="rounded-lg border border-accent/30 bg-accent/10 p-5">
-                    <h3 className="mb-2 font-sans text-sm font-semibold uppercase text-heading">Consejo del equipo</h3>
+                    <h3 className="mb-2 font-sans text-sm font-semibold uppercase text-heading">{tr('Consejo del equipo')}</h3>
                     <p className="font-serif text-lg leading-8 text-heading/80">{service.proTip}</p>
                   </section>
                   <section>
-                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">Errores comunes</h3>
+                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">{tr('Errores comunes')}</h3>
                     <ul className="space-y-3">
                       {service.commonMistakes.map((mistake) => (
                         <li key={mistake} className="flex gap-3 rounded-md border border-red-300/40 bg-red-500/10 px-4 py-3 text-sm leading-7 text-red-700 dark:text-red-300">
@@ -207,7 +209,7 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                     </ul>
                   </section>
                   <section>
-                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">Preguntas frecuentes</h3>
+                    <h3 className="mb-3 font-sans text-sm font-semibold uppercase text-accent">{tr('Preguntas frecuentes')}</h3>
                     <div className="space-y-3">
                       {service.faqs.map((faq) => (
                         <details key={faq.q} className="rounded-md border border-line bg-surface-card p-4">
@@ -227,11 +229,11 @@ export function ServiceDrawer({ service, vertical, onClose }: ServiceDrawerProps
                   to={diagnosticoHref(vertical.slug, service.id)}
                   className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-white transition hover:bg-primary-dark focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
                 >
-                  Solicitar orientación
+                  {tr('Solicitar orientación')}
                   <ArrowRight size={17} aria-hidden="true" />
                 </Link>
                 <a
-                  href={createWhatsappHref(`${vertical.whatsappPrompt} Servicio: ${service.title}`)}
+                  href={createWhatsappHref(`${vertical.whatsappPrompt} ${tr('Servicio:')} ${service.title}`)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-md border border-line px-5 py-3 text-sm font-semibold text-heading transition hover:border-[#25D366]/50 hover:text-[#128C7E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"

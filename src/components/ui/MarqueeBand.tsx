@@ -1,5 +1,6 @@
 import type { LucideIcon } from 'lucide-react'
 import { Clock, MapPin, Phone, Shield, ShieldCheck, Star, Users } from 'lucide-react'
+import { useLanguage } from '../../context/LanguageContext'
 
 interface MarqueeBandProps {
   variant?: 'light' | 'dark'
@@ -49,6 +50,7 @@ function MarqueeRow({
   dimmed?: boolean
 }) {
   const duration = `${(items.length * 10 * 40) / speed}s`
+  const { tr } = useLanguage()
 
   return (
     <div className="overflow-hidden whitespace-nowrap">
@@ -67,7 +69,7 @@ function MarqueeRow({
                   isDark ? (dimmed ? 'text-white/40' : 'text-white/80') : dimmed ? 'text-primary/45' : 'text-primary/70'
                 }`}
               >
-                {item.text}
+                {tr(item.text)}
               </span>
               <span className={`text-lg ${isDark ? (dimmed ? 'text-white/10' : 'text-white/20') : dimmed ? 'text-primary/10' : 'text-primary/15'}`}>
                 {dimmed ? '◆' : '✦'}

@@ -5,24 +5,17 @@
     <link rel="icon" type="image/png" href="/src/assets/images/logo-cb-monogram.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Variante de demo (tema/estilo): fija atributos antes del primer paint para evitar parpadeo. -->
+    <!-- Fija el tema inicial antes del primer paint para evitar parpadeo. -->
     <script>
       (function () {
         try {
           var el = document.documentElement;
-          var raw =
-            new URLSearchParams(location.search).get('v') ||
-            localStorage.getItem('cb-variant') ||
-            'claro-combinado';
-          var parts = String(raw).split('-');
-          el.setAttribute('data-theme', parts[0] === 'oscuro' ? 'dark' : 'light');
-          el.setAttribute(
-            'data-density',
-            parts[1] === 'minimal' ? 'minimal' : parts[1] === 'combinado' ? 'combo' : 'rich'
-          );
+          el.setAttribute('data-theme', 'light');
+          el.setAttribute('data-density', 'rich');
+          localStorage.removeItem('cb-variant');
         } catch (e) {
           document.documentElement.setAttribute('data-theme', 'light');
-          document.documentElement.setAttribute('data-density', 'combo');
+          document.documentElement.setAttribute('data-density', 'rich');
         }
       })();
     </script>

@@ -1,26 +1,19 @@
 import { useEffect, useState } from 'react'
 import type { CSSProperties, MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowRight, ChevronDown, Compass, Menu, Phone, X } from 'lucide-react'
+import { ArrowRight, ChevronDown, Compass, Languages, Menu, Moon, Sun, X } from 'lucide-react'
 import { Link, useLocation } from 'react-router-dom'
 import { ThemedLogo } from '../ui/ThemedLogo'
+import { useLanguage, useLocalizedNavigation } from '../../context/LanguageContext'
 import { useVariant } from '../../context/VariantContext'
 import { useScrollSpy } from '../../hooks/useScrollSpy'
 import { menuGroupKey, menuImage } from '../../data/imageLibrary'
-import { areaNavGroups, mobileUtilityLinks, simpleNavLinks } from '../../data/navigationCatalog'
 import type { AreaNavGroup, SiteNavLink } from '../../data/navigationCatalog'
-import { officePhoneDisplay, officePhoneHref } from '../../data/serviceCatalog'
 import { scrollTo } from '../../hooks/useSmoothScroll'
 
 type DesktopNavItem =
   | { type: 'simple'; item: SiteNavLink }
   | { type: 'area'; item: AreaNavGroup }
-
-const desktopNavItems: DesktopNavItem[] = [
-  { type: 'simple', item: simpleNavLinks[0]! },
-  ...areaNavGroups.map((area) => ({ type: 'area' as const, item: area })),
-  { type: 'simple', item: simpleNavLinks[1]! },
-]
 
 // Secciones del Home observadas por scroll-spy para mover el indicador activo.
 const HOME_SECTIONS = ['hero', 'servicios', 'nosotros', 'valores', 'contacto']
@@ -32,7 +25,7 @@ function splitTarget(to: string) {
   return { targetPath: targetPath || '/', hash }
 }
 
-function areaFromPath(pathname: string) {
+function areaFromPath(pathname: string, areaNavGroups: AreaNavGroup[]) {
   return areaNavGroups.find((area) => area.to === pathname)?.key ?? null
 }
 
@@ -40,17 +33,78 @@ function groupedItemCount(area: AreaNavGroup) {
   return area.groups.reduce((total, group) => total + group.items.length, 0)
 }
 
+type ThemeToggleProps = {
+  theme: 'light' | 'dark'
+  onToggle: () => void
+  tr: (text: string) => string
+  size?: 'desktop' | 'mobile'
+}
+
+function ThemeToggle({ theme, onToggle, tr, size = 'desktop' }: ThemeToggleProps) {
+  const isDark = theme === 'dark'
+  const Icon = isDark ? Sun : Moon
+  const label = isDark ? tr('Activar modo claro') : tr('Activar modo oscuro')
+  const sizeClass = size === 'desktop' ? 'h-11 w-11' : 'h-10 w-10'
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.96 }}
+      type="button"
+      onClick={onToggle}
+      aria-label={label}
+      title={label}
+      className={`inline-flex ${sizeClass} shrink-0 items-center justify-center rounded-md border border-line bg-surface-card text-heading transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
+    >
+      <Icon size={17} aria-hidden="true" />
+    </motion.button>
+  )
+}
+
+type LanguageToggleProps = {
+  language: 'es' | 'en'
+  onToggle: () => void
+  tr: (text: string) => string
+  size?: 'desktop' | 'mobile'
+}
+
+function LanguageToggle({ language, onToggle, tr, size = 'desktop' }: LanguageToggleProps) {
+  const nextLabel = language === 'es' ? 'EN' : 'ES'
+  const label = language === 'es' ? tr('Cambiar a English') : tr('Cambiar a Español')
+  const sizeClass = size === 'desktop' ? 'h-11 px-3' : 'h-10 px-3'
+
+  return (
+    <motion.button
+      whileTap={{ scale: 0.96 }}
+      type="button"
+      onClick={onToggle}
+      aria-label={label}
+      title={label}
+      className={`inline-flex ${sizeClass} shrink-0 items-center justify-center gap-1.5 rounded-md border border-line bg-surface-card text-sm font-semibold text-heading transition hover:border-accent hover:text-accent focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent`}
+    >
+      <Languages size={16} aria-hidden="true" />
+      {nextLabel}
+    </motion.button>
+  )
+}
+
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const { pathname, hash: currentHash } = useLocation()
-  const [openMobileGroup, setOpenMobileGroup] = useState<string | null>(() => areaFromPath(pathname) ?? 'seguros')
-  const { density } = useVariant()
+  const { simpleNavLinks, mobileUtilityLinks, areaNavGroups } = useLocalizedNavigation()
+  const { language, toggleLanguage, tr } = useLanguage()
+  const [openMobileGroup, setOpenMobileGroup] = useState<string | null>('seguros')
+  const { density, theme, toggleTheme } = useVariant()
   const isHome = pathname === '/'
   const activeSection = useScrollSpy(isHome ? HOME_SECTIONS : [])
 
   const activeArea = areaNavGroups.find((area) => area.key === activeDropdown) ?? null
+  const desktopNavItems: DesktopNavItem[] = [
+    { type: 'simple', item: simpleNavLinks[0]! },
+    ...areaNavGroups.map((area) => ({ type: 'area' as const, item: area })),
+    { type: 'simple', item: simpleNavLinks[1]! },
+  ]
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 24)
@@ -92,7 +146,7 @@ export function Navbar() {
 
   const toggleMobileMenu = () => {
     const nextOpen = !isMobileMenuOpen
-    if (nextOpen) setOpenMobileGroup(areaFromPath(pathname) ?? 'seguros')
+    if (nextOpen) setOpenMobileGroup(areaFromPath(pathname, areaNavGroups) ?? 'seguros')
     setIsMobileMenuOpen(nextOpen)
   }
 
@@ -130,7 +184,7 @@ export function Navbar() {
             <ThemedLogo className="h-9 w-auto object-contain" />
           </Link>
 
-          <nav className="hidden items-center gap-1 lg:flex" id="navbar-desktop" aria-label="Navegación principal">
+          <nav className="hidden items-center gap-1 lg:flex" id="navbar-desktop" aria-label={tr('Navegación principal')}>
             {desktopNavItems.map(({ type, item: navItem }) => {
               const active = computeActive(navItem.to)
               const isOpen = type === 'area' && activeDropdown === navItem.key
@@ -192,13 +246,8 @@ export function Navbar() {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex" id="navbar-cta">
-            <a
-              href={officePhoneHref}
-              className="inline-flex items-center gap-2 text-sm font-semibold text-muted transition hover:text-heading"
-            >
-              <Phone size={15} aria-hidden="true" />
-              <span>{officePhoneDisplay}</span>
-            </a>
+            <LanguageToggle language={language} onToggle={toggleLanguage} tr={tr} />
+            <ThemeToggle theme={theme} onToggle={toggleTheme} tr={tr} />
             <Link
               to="/diagnostico"
               onMouseEnter={() => setActiveDropdown(null)}
@@ -207,7 +256,7 @@ export function Navbar() {
               className="inline-flex min-h-11 items-center gap-2 rounded-md border border-accent/40 px-4 py-2.5 text-sm font-semibold text-heading transition hover:border-accent hover:text-accent"
             >
               <Compass size={15} aria-hidden="true" />
-              Encuentra tu servicio
+              {tr('Encuentra tu servicio')}
             </Link>
             <Link
               to="/#contacto"
@@ -217,23 +266,27 @@ export function Navbar() {
               onFocus={() => setActiveDropdown(null)}
               className="inline-flex min-h-11 items-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-primary-dark"
             >
-              Agendar
+              {tr('Agendar')}
               <ArrowRight size={15} aria-hidden="true" />
             </Link>
           </div>
 
-          <motion.button
-            whileTap={{ scale: 0.96 }}
-            type="button"
-            className="flex h-10 w-10 items-center justify-center rounded-md border border-line bg-surface-card text-heading lg:hidden"
-            onClick={toggleMobileMenu}
-            aria-label={isMobileMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="navbar-mobile-menu"
-            id="navbar-mobile-toggle"
-          >
-            {isMobileMenuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
-          </motion.button>
+          <div className="flex items-center gap-2 lg:hidden">
+            <LanguageToggle language={language} onToggle={toggleLanguage} tr={tr} size="mobile" />
+            <ThemeToggle theme={theme} onToggle={toggleTheme} tr={tr} size="mobile" />
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              type="button"
+              className="flex h-10 w-10 items-center justify-center rounded-md border border-line bg-surface-card text-heading"
+              onClick={toggleMobileMenu}
+              aria-label={isMobileMenuOpen ? tr('Cerrar menú') : tr('Abrir menú')}
+              aria-expanded={isMobileMenuOpen}
+              aria-controls="navbar-mobile-menu"
+              id="navbar-mobile-toggle"
+            >
+              {isMobileMenuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
+            </motion.button>
+          </div>
         </div>
       </div>
 
@@ -248,7 +301,7 @@ export function Navbar() {
             className="nav-mega fixed left-1/2 top-[86px] hidden w-[min(940px,calc(100vw-2rem))] -translate-x-1/2 overflow-hidden rounded-lg border border-line bg-surface/95 shadow-[0_26px_70px_rgba(10,37,64,0.18)] backdrop-blur-xl lg:block"
             style={{ '--menu-bg': `url("${menuImage(menuGroupKey[activeArea.key] ?? 'neutral', density)}")` } as CSSProperties}
             role="menu"
-            aria-label={`Menú de ${activeArea.label}`}
+            aria-label={`${tr('Menú de')} ${activeArea.label}`}
             onMouseEnter={() => setActiveDropdown(activeArea.key)}
             onPointerEnter={() => setActiveDropdown(activeArea.key)}
           >
@@ -258,7 +311,7 @@ export function Navbar() {
                 <h2 className="font-sans text-lg font-semibold leading-tight text-heading">{activeArea.label}</h2>
                 <p className="mt-3 text-sm leading-6 text-muted">{activeArea.description}</p>
                 <p className="mt-4 text-xs font-semibold uppercase text-accent">
-                  {groupedItemCount(activeArea)} servicios organizados
+                  {groupedItemCount(activeArea)} {tr('servicios organizados')}
                 </p>
                 <Link
                   to={activeArea.to}
@@ -266,7 +319,7 @@ export function Navbar() {
                   className="mt-5 inline-flex min-h-10 items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary-dark"
                   role="menuitem"
                 >
-                  Ver página del área
+                  {tr('Ver página del área')}
                   <ArrowRight size={15} aria-hidden="true" />
                 </Link>
               </div>
@@ -368,7 +421,7 @@ export function Navbar() {
                               onClick={(event) => handleRouteClick(event, area.to)}
                               className="flex min-h-10 items-center justify-between rounded-md px-3 text-sm font-semibold text-heading transition hover:bg-surface-card"
                             >
-                              Ver página del área
+                              {tr('Ver página del área')}
                               <ArrowRight size={15} aria-hidden="true" />
                             </Link>
 
@@ -406,26 +459,19 @@ export function Navbar() {
               <Link
                 to="/diagnostico"
                 onClick={(event) => handleRouteClick(event, '/diagnostico')}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-accent/40 bg-surface-card px-4 py-2.5 text-sm font-semibold text-heading sm:col-span-2"
+                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-accent/40 bg-surface-card px-4 py-2.5 text-sm font-semibold text-heading"
               >
                 <Compass size={15} aria-hidden="true" />
-                Encuentra tu servicio
+                {tr('Encuentra tu servicio')}
               </Link>
               <Link
                 to="/#contacto"
                 onClick={(event) => handleRouteClick(event, '/#contacto')}
                 className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-semibold text-white"
               >
-                Agendar
+                {tr('Agendar')}
                 <ArrowRight size={15} aria-hidden="true" />
               </Link>
-              <a
-                href={officePhoneHref}
-                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-md border border-line bg-surface-card px-4 py-2.5 text-sm font-semibold text-heading"
-              >
-                <Phone size={15} aria-hidden="true" />
-                {officePhoneDisplay}
-              </a>
             </div>
           </motion.div>
         ) : null}

@@ -7,14 +7,16 @@ import { Navbar } from './components/sections/Navbar'
 import { Footer } from './components/sections/Footer'
 import { ScrollProgress } from './components/ui/ScrollProgress'
 import { ScrollToTop } from './components/ui/ScrollToTop'
-import { VariantSwitcher } from './components/ui/VariantSwitcher'
 import { WhatsAppButton } from './components/ui/WhatsAppButton'
+import { CallButton } from './components/ui/CallButton'
 import { BackToTop } from './components/ui/BackToTop'
+import { useLanguage } from './context/LanguageContext'
 import { EASE_BRAND } from './lib/motion'
 
 function App() {
   useSmoothScroll()
   const { pathname } = useLocation()
+  const { tr } = useLanguage()
 
   useEffect(() => {
     const titles: Record<string, string> = {
@@ -35,7 +37,7 @@ function App() {
       '/diagnostico': 'Cuéntanos tu situación en 3 o 4 preguntas y te recomendamos el servicio correcto, sin compromiso.',
     }
 
-    document.title = titles[pathname] || 'Christian Brokerage | Seguros, Taxes e Inmigración'
+    document.title = tr(titles[pathname] || 'Christian Brokerage | Seguros, Taxes e Inmigración')
 
     let metaDesc = document.querySelector('meta[name="description"]')
     if (!metaDesc) {
@@ -43,8 +45,8 @@ function App() {
       metaDesc.setAttribute('name', 'description')
       document.head.appendChild(metaDesc)
     }
-    metaDesc.setAttribute('content', descriptions[pathname] || descriptions['/'])
-  }, [pathname])
+    metaDesc.setAttribute('content', tr(descriptions[pathname] || descriptions['/']))
+  }, [pathname, tr])
 
   return (
     <div className="relative">
@@ -65,9 +67,9 @@ function App() {
         </motion.main>
       </AnimatePresence>
       <Footer />
+      <CallButton />
       <WhatsAppButton />
       <BackToTop />
-      <VariantSwitcher />
     </div>
   )
 }

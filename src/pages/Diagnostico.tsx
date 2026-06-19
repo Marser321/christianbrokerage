@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { CheckCircle2, Languages, Lock } from 'lucide-react'
 import { DiagnosticoWizard, findService, resolveInitialFromParams } from '../components/services/ServiceLeadWizard'
+import { useLanguage } from '../context/LanguageContext'
 import { fadeUp, viewportOnce } from '../lib/motion'
 
 const trustCues = [
@@ -13,6 +14,7 @@ const trustCues = [
 
 export function Diagnostico() {
   const [searchParams, setSearchParams] = useSearchParams()
+  const { tr } = useLanguage()
   const area = searchParams.get('area')
   const servicio = searchParams.get('servicio')
 
@@ -34,19 +36,18 @@ export function Diagnostico() {
       <section className="py-16 md:py-24">
         <div className="mx-auto max-w-2xl px-5 sm:px-6 lg:px-8">
           <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={viewportOnce}>
-            <p className="eyebrow mb-4">Diagnóstico</p>
+            <p className="eyebrow mb-4">{tr('Diagnóstico')}</p>
             <h1 className="text-3xl font-serif font-semibold leading-tight text-heading md:text-5xl">
-              Cuéntanos tu situación y te decimos por dónde empezar.
+              {tr('Cuéntanos tu situación y te decimos por dónde empezar.')}
             </h1>
             <p className="mt-5 text-base leading-8 text-muted">
-              Tres o cuatro preguntas rápidas. Al final verás una recomendación clara y, si quieres, dejas tus datos.
-              Sin compromiso.
+              {tr('Tres o cuatro preguntas rápidas. Al final verás una recomendación clara y, si quieres, dejas tus datos. Sin compromiso.')}
             </p>
             <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted">
               {trustCues.map(({ icon: Icon, label }) => (
                 <li key={label} className="inline-flex items-center gap-2">
                   <Icon size={16} className="text-accent" aria-hidden="true" />
-                  {label}
+                  {tr(label)}
                 </li>
               ))}
             </ul>
