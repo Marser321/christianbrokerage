@@ -19,8 +19,10 @@ import {
   ShieldCheck,
   Users,
 } from 'lucide-react'
-import damarisCoralDesk from '../assets/images/real/damaris-coral-desk.jpg'
+import christianReal from '../assets/images/real/christian-real.jpg'
+import damarisDeskBlue from '../assets/images/real/damaris-desk-blue.jpg'
 import damarisGrayBook from '../assets/images/real/damaris-gray-book.jpg'
+import damarisNavyStanding from '../assets/images/real/damaris-navy-standing.jpg'
 import damarisWhiteBook from '../assets/images/real/damaris-white-book.jpg'
 
 export type ServiceSlug = 'seguros' | 'taxes' | 'inmigracion' | 'otros'
@@ -80,6 +82,10 @@ export type ServiceVertical = {
     src: string
     alt: string
     caption: string
+    secondary?: {
+      src: string
+      alt: string
+    }
   }
   trust: TrustPoint[]
   editorialPanel: EditorialPanel
@@ -509,8 +515,8 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     bookingTitle: 'Agenda una llamada para cotizar seguro',
     bookingCopy: 'Usa el calendario si está disponible o escríbenos por WhatsApp e incluye los documentos que tengas a mano.',
     visual: {
-      src: damarisCoralDesk,
-      alt: 'Damaris Escalante de Christian Brokerage atendiendo en su oficina',
+      src: damarisDeskBlue,
+      alt: 'Damaris Escalante de Christian Brokerage en su oficina para orientación de seguros',
       caption: 'Cotizaciones y certificados gestionados desde una oficina local, con seguimiento humano.',
     },
     trust: [
@@ -544,7 +550,11 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     visual: {
       src: damarisGrayBook,
       alt: 'Damaris Escalante, Enrolled Agent de Christian Brokerage, revisando educación financiera',
-      caption: 'Planeación fiscal con criterio: declaraciones, ITIN y representación ante el IRS.',
+      caption: 'Damaris y Christian combinan preparación fiscal, credenciales visibles y seguimiento humano desde una oficina real.',
+      secondary: {
+        src: christianReal,
+        alt: 'Christian Eduardo de Christian Brokerage en su oficina con certificaciones profesionales',
+      },
     },
     trust: [
       { icon: Award, title: 'IRS Acceptance Agent', desc: 'Proceso ITIN con certificación documental cuando aplica.' },
@@ -609,9 +619,9 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     bookingTitle: 'Agenda una orientación',
     bookingCopy: 'Cuéntanos qué trámite necesitas resolver y qué documentos tienes a mano. Te indicamos los próximos pasos y, cuando el caso requiere abogado, te lo decimos con claridad.',
     visual: {
-      src: damarisWhiteBook,
-      alt: 'Damaris Escalante de Christian Brokerage organizando documentos',
-      caption: 'Trámites de notaría, traducciones y empresas gestionados desde una oficina local.',
+      src: damarisNavyStanding,
+      alt: 'Damaris Escalante de Christian Brokerage frente a certificaciones profesionales',
+      caption: 'Trámites de notaría, traducciones y empresas gestionados con orden documental desde una oficina local.',
     },
     trust: [
       { icon: FileText, title: 'Traducciones certificadas', desc: 'Documentos con carta de exactitud listos para presentar.' },

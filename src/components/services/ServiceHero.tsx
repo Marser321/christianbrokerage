@@ -9,6 +9,8 @@ type ServiceHeroProps = {
 }
 
 export function ServiceHero({ vertical }: ServiceHeroProps) {
+  const secondaryVisual = vertical.visual.secondary
+
   return (
     <section className={`service-hero service-hero-${vertical.slug} relative overflow-hidden bg-surface pt-28 pb-14 md:pt-36 md:pb-20`}>
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/40 to-transparent" aria-hidden="true" />
@@ -17,7 +19,7 @@ export function ServiceHero({ vertical }: ServiceHeroProps) {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-7"
+          className={secondaryVisual ? 'lg:col-span-6' : 'lg:col-span-7'}
         >
           <p className="eyebrow mb-5">{vertical.eyebrow}</p>
           <h1 className="max-w-4xl text-4xl font-serif font-semibold leading-[1.04] text-heading sm:text-5xl lg:text-6xl">
@@ -65,18 +67,40 @@ export function ServiceHero({ vertical }: ServiceHeroProps) {
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="lg:col-span-5"
+          className={secondaryVisual ? 'lg:col-span-6' : 'lg:col-span-5'}
         >
-          <div className="relative overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_28px_70px_rgba(10,37,64,0.16)]">
-            <img
-              src={vertical.visual.src}
-              alt={vertical.visual.alt}
-              className={`aspect-[4/5] w-full object-cover ${realPhotoFramePos(`service-${vertical.slug}`)}`}
-              loading="eager"
-              fetchPriority="high"
-            />
-          </div>
-          <figcaption className="mt-4 max-w-md text-sm leading-6 text-muted">
+          {secondaryVisual ? (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_24px_60px_rgba(10,37,64,0.15)]">
+                <img
+                  src={vertical.visual.src}
+                  alt={vertical.visual.alt}
+                  className={`aspect-[5/4] w-full object-cover sm:aspect-[4/5] ${realPhotoFramePos(`service-${vertical.slug}`)}`}
+                  loading="eager"
+                  fetchPriority="high"
+                />
+              </div>
+              <div className="overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_24px_60px_rgba(10,37,64,0.15)]">
+                <img
+                  src={secondaryVisual.src}
+                  alt={secondaryVisual.alt}
+                  className={`aspect-[5/4] w-full object-cover sm:aspect-[4/5] ${realPhotoFramePos(`service-${vertical.slug}-secondary`)}`}
+                  loading="eager"
+                />
+              </div>
+            </div>
+          ) : (
+            <div className="relative overflow-hidden rounded-lg border border-line bg-surface-card shadow-[0_28px_70px_rgba(10,37,64,0.16)]">
+              <img
+                src={vertical.visual.src}
+                alt={vertical.visual.alt}
+                className={`aspect-[4/5] w-full object-cover ${realPhotoFramePos(`service-${vertical.slug}`)}`}
+                loading="eager"
+                fetchPriority="high"
+              />
+            </div>
+          )}
+          <figcaption className={`mt-4 ${secondaryVisual ? 'max-w-2xl' : 'max-w-md'} text-sm leading-6 text-muted`}>
             {vertical.visual.caption}
           </figcaption>
         </motion.figure>

@@ -142,9 +142,11 @@ const realPhotoFraming: Record<string, string> = {
   'home-certificates': 'object-[center_15%]', // Foto 2 navy de pie
   'home-office': 'object-[center_20%]', // Foto 4 beige en escritorio
   'home-contacto': 'object-[center_22%]', // Foto 3 blanco (avatar 4:5)
-  'service-seguros': 'object-[center_22%]', // Foto 1 coral (reuso)
-  'service-taxes': 'object-[center_24%]', // Foto 5 gris (Money Works)
+  'service-seguros': 'object-[center_24%]', // Damaris en escritorio para seguros
+  'service-taxes': 'object-[center_24%]', // Damaris gris (Money Works)
+  'service-taxes-secondary': 'object-[center_38%]', // Christian en escritorio, formato 4:5
   'service-inmigracion': 'object-[center_30%]', // Foto 3 blanco (reuso)
+  'service-otros': 'object-[center_22%]', // Damaris de pie con certificados
 }
 
 export const realPhotoFramePos = (slot: string): string =>
