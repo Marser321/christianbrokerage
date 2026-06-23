@@ -11,7 +11,7 @@ type BookingBlockProps = {
 }
 
 export function BookingBlock({ vertical }: BookingBlockProps) {
-  const calendarSrc = getCalendarSrc(vertical.calendarEnv, vertical.slug)
+  const calendarSrc = getCalendarSrc(vertical.calendarEnv, vertical.slug, vertical.calendarUrl)
   const { tr } = useLanguage()
 
   return (

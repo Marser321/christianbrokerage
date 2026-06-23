@@ -72,6 +72,7 @@ export type ServiceVertical = {
   whatsappLabel: string
   whatsappPrompt: string
   calendarEnv: string
+  calendarUrl: string
   bookingAnchor: string
   bookingTitle: string
   bookingCopy: string
@@ -88,6 +89,12 @@ export type ServiceVertical = {
 export const officePhoneDisplay = '(212) 923-2610'
 export const officePhoneHref = 'tel:+12129232610'
 export const whatsappBase = 'https://wa.me/12129232610'
+
+// Calendarios públicos de GoHighLevel. Se usan como valor por defecto cuando no
+// hay variable de entorno; el env (VITE_GHL_CALENDAR_*) sigue teniendo prioridad.
+export const HOME_CALENDAR_URL = 'https://app.christianbrokerageusa.com/widget/booking/8eNNrLbmwjcNO21JQOJB'
+export const SERVICE_CALENDAR_URL =
+  'https://app.christianbrokerageusa.com/widget/bookings/kenia-ocumares-personal-calendar-1pi_8qxbs'
 
 export function createWhatsappHref(message: string) {
   return `${whatsappBase}?text=${encodeURIComponent(message)}`
@@ -497,6 +504,7 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     whatsappLabel: 'Cotizar por WhatsApp',
     whatsappPrompt: 'Hola, necesito cotizar un seguro con Christian Brokerage.',
     calendarEnv: 'VITE_GHL_CALENDAR_SEGUROS',
+    calendarUrl: SERVICE_CALENDAR_URL,
     bookingAnchor: 'agendar-seguro',
     bookingTitle: 'Agenda una llamada para cotizar seguro',
     bookingCopy: 'Usa el calendario si está disponible o escríbenos por WhatsApp e incluye los documentos que tengas a mano.',
@@ -529,6 +537,7 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     whatsappLabel: 'Consultar por WhatsApp',
     whatsappPrompt: 'Hola, necesito ayuda con taxes o un trámite del IRS.',
     calendarEnv: 'VITE_GHL_CALENDAR_TAXES',
+    calendarUrl: SERVICE_CALENDAR_URL,
     bookingAnchor: 'agendar-taxes',
     bookingTitle: 'Programa una revisión fiscal',
     bookingCopy: 'Ten a mano cartas del IRS, W-2, 1099, declaraciones previas o documentos de empresa. Si es ITIN, menciona si es solicitud nueva o renovación.',
@@ -561,6 +570,7 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     whatsappLabel: 'Consultar por WhatsApp',
     whatsappPrompt: 'Hola, necesito orientación administrativa para un trámite migratorio.',
     calendarEnv: 'VITE_GHL_CALENDAR_INMIGRACION',
+    calendarUrl: SERVICE_CALENDAR_URL,
     bookingAnchor: 'agendar-inmigracion',
     bookingTitle: 'Reserva una orientación documental',
     bookingCopy: 'La llamada sirve para ordenar documentos, tiempos y próximos pasos administrativos. Para asesoría legal, te indicaremos cuándo corresponde consultar a un abogado.',
@@ -594,6 +604,7 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     whatsappLabel: 'Consultar por WhatsApp',
     whatsappPrompt: 'Hola, necesito ayuda con un trámite de notaría, divorcio, traducción o formación de compañía.',
     calendarEnv: 'VITE_GHL_CALENDAR_OTROS',
+    calendarUrl: SERVICE_CALENDAR_URL,
     bookingAnchor: 'agendar-otros',
     bookingTitle: 'Agenda una orientación',
     bookingCopy: 'Cuéntanos qué trámite necesitas resolver y qué documentos tienes a mano. Te indicamos los próximos pasos y, cuando el caso requiere abogado, te lo decimos con claridad.',

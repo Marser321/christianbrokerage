@@ -13,6 +13,7 @@ import damarisReal from '../assets/images/real/damaris-real.jpg'
 import damarisWhiteBook from '../assets/images/real/damaris-white-book.jpg'
 import {
   createWhatsappHref,
+  HOME_CALENDAR_URL,
   officePhoneDisplay,
   officePhoneHref,
 } from '../data/serviceCatalog'
@@ -212,7 +213,7 @@ function ProcessBand() {
 }
 
 function HomeBooking() {
-  const calendarSrc = getCalendarSrc('VITE_GHL_CALENDAR_HOME', 'home')
+  const calendarSrc = getCalendarSrc('VITE_GHL_CALENDAR_HOME', 'home', HOME_CALENDAR_URL)
   const { tr } = useLanguage()
 
   return (

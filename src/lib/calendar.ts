@@ -19,8 +19,9 @@ function readTrackedParam(name: string) {
   }
 }
 
-export function getCalendarSrc(envName: string, category: string) {
-  const rawValue = (import.meta.env as Record<string, string | undefined>)[envName]
+export function getCalendarSrc(envName: string, category: string, fallbackUrl?: string) {
+  const envValue = (import.meta.env as Record<string, string | undefined>)[envName]
+  const rawValue = !envValue || placeholderPattern.test(envValue) ? fallbackUrl : envValue
   if (!rawValue || placeholderPattern.test(rawValue)) return null
 
   try {
