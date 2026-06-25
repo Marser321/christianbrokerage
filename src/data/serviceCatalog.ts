@@ -19,8 +19,8 @@ import {
   ShieldCheck,
   Users,
 } from 'lucide-react'
-import christianReal from '../assets/images/real/christian-real.jpg'
-import damarisDeskBlue from '../assets/images/real/damaris-desk-blue.jpg'
+import christianTaxesSober from '../assets/images/real/christian-taxes-sober-03.jpg'
+import damarisPhoneBlue from '../assets/images/real/damaris-phone-blue.jpg'
 import damarisGrayBook from '../assets/images/real/damaris-gray-book.jpg'
 import damarisNavyStanding from '../assets/images/real/damaris-navy-standing.jpg'
 import damarisWhiteBook from '../assets/images/real/damaris-white-book.jpg'
@@ -282,6 +282,25 @@ const taxServices: ServiceItem[] = [
     ],
   },
   {
+    id: 'impuestos-internacionales',
+    icon: Globe,
+    title: 'Impuestos Internacionales',
+    summary: 'Cumplimiento fiscal para personas y empresas con cuentas, ingresos o activos fuera de EE.UU.: reporte de cuentas extranjeras, ingreso del exterior y estructuras con socios o filiales internacionales.',
+    features: ['FBAR (FinCEN 114) y FATCA (Form 8938)', 'Ingreso extranjero, crédito y tratados', 'Form 5471 / 5472 para empresas'],
+    turnaround: '5 a 7 días hábiles',
+    requirements: 'Identificación, SSN o ITIN, declaraciones previas, estados de cuentas extranjeras, ingresos del exterior y documentos de empresas o socios internacionales.',
+    proTip: 'Una cuenta en tu país de origen que superó $10,000 en cualquier momento del año puede activar el FBAR; reportarla a tiempo evita multas que suelen ser mucho mayores que el impuesto.',
+    premiumInclusions: ['Revisión de obligaciones de reporte (FBAR/FATCA)', 'Análisis de tratados y doble tributación', 'Coordinación entre declaración personal y de empresa'],
+    glossaryDefinition: 'Preparación y reporte fiscal ante el IRS para contribuyentes y empresas con cuentas, ingresos, activos o participaciones fuera de Estados Unidos.',
+    whoNeedsIt: ['Personas con cuentas, propiedades o ingresos en su país de origen', 'Empresas de EE.UU. con dueños o socios extranjeros', 'Dueños de EE.UU. con participación en compañías en el exterior'],
+    howItWorks: ['Revisamos residencia fiscal, cuentas e ingresos en el exterior.', 'Identificamos obligaciones de reporte y tratados aplicables.', 'Preparamos la declaración con los formularios internacionales (FBAR, 8938, 5471/5472 según el caso).', 'Coordinamos el envío y damos seguimiento anual.'],
+    commonMistakes: ['No reportar cuentas o ingresos del país de origen pensando que "no cuentan".', 'Omitir formularios internacionales cuyas multas inician en $10,000 por formulario.'],
+    faqs: [
+      { q: '¿Tengo que declarar las cuentas o ingresos de mi país?', a: 'En muchos casos sí. EE.UU. grava el ingreso mundial de sus residentes fiscales y exige reportar cuentas extranjeras (FBAR/FATCA) según los montos. Revisamos tu caso antes de declarar.' },
+      { q: '¿Voy a pagar impuestos dos veces?', a: 'No necesariamente. Existen créditos por impuestos pagados en el extranjero y tratados que ayudan a evitar la doble tributación; analizamos cuáles aplican a tu situación.' },
+    ],
+  },
+  {
     id: 'itin',
     icon: Award,
     title: 'ITIN y Acceptance Agent',
@@ -515,8 +534,8 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
     bookingTitle: 'Agenda una llamada para cotizar seguro',
     bookingCopy: 'Usa el calendario si está disponible o escríbenos por WhatsApp e incluye los documentos que tengas a mano.',
     visual: {
-      src: damarisDeskBlue,
-      alt: 'Damaris Escalante de Christian Brokerage en su oficina para orientación de seguros',
+      src: damarisPhoneBlue,
+      alt: 'Damaris Escalante de Christian Brokerage atendiendo por teléfono en su oficina para orientación de seguros',
       caption: 'Cotizaciones y certificados gestionados desde una oficina local, con seguimiento humano.',
     },
     trust: [
@@ -552,8 +571,8 @@ export const serviceVerticals: Record<ServiceSlug, ServiceVertical> = {
       alt: 'Damaris Escalante, Enrolled Agent de Christian Brokerage, revisando educación financiera',
       caption: 'Damaris y Christian combinan preparación fiscal, credenciales visibles y seguimiento humano desde una oficina real.',
       secondary: {
-        src: christianReal,
-        alt: 'Christian Eduardo de Christian Brokerage en su oficina con certificaciones profesionales',
+        src: christianTaxesSober,
+        alt: 'Christian Eduardo de Christian Brokerage en un evento profesional de taxes',
       },
     },
     trust: [

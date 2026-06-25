@@ -25,6 +25,7 @@ export const serviceImageKey: Record<string, string> = {
   auditorias: 'tax-auditoria',
   retiro: 'tax-retiro',
   universidad: 'tax-529',
+  'impuestos-internacionales': 'tax-internacional',
   i130: 'inm-i130',
   'ajuste-estatus': 'inm-ajuste',
   n400: 'inm-n400',
@@ -95,6 +96,7 @@ export const serviceFraming: Record<string, { foto?: string; editorial?: string 
   auditorias: { foto: 'object-[right_26%]', editorial: 'object-[right_58%]' },
   retiro: { foto: 'object-[right_30%]', editorial: 'object-[right_62%]' },
   universidad: { foto: 'object-[right_34%]', editorial: 'object-[right_64%]' },
+  'impuestos-internacionales': { foto: 'object-[right_28%]', editorial: 'object-[right_60%]' },
   i130: { foto: 'object-[right_28%]', editorial: 'object-[right_60%]' },
   'ajuste-estatus': { foto: 'object-[right_24%]', editorial: 'object-[right_58%]' },
   n400: { foto: 'object-[right_24%]', editorial: 'object-[right_58%]' },
@@ -142,9 +144,9 @@ const realPhotoFraming: Record<string, string> = {
   'home-certificates': 'object-[center_15%]', // Foto 2 navy de pie
   'home-office': 'object-[center_20%]', // Foto 4 beige en escritorio
   'home-contacto': 'object-[center_22%]', // Foto 3 blanco (avatar 4:5)
-  'service-seguros': 'object-[center_24%]', // Damaris en escritorio para seguros
+  'service-seguros': 'object-[center_24%]', // Damaris al teléfono en su oficina (seguros)
   'service-taxes': 'object-[center_24%]', // Damaris gris (Money Works)
-  'service-taxes-secondary': 'object-[center_38%]', // Christian en escritorio, formato 4:5
+  'service-taxes-secondary': 'object-[center_38%]', // Christian en evento de taxes, formato 4:5
   'service-inmigracion': 'object-[center_30%]', // Foto 3 blanco (reuso)
   'service-otros': 'object-[center_22%]', // Damaris de pie con certificados
 }

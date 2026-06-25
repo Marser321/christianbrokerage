@@ -126,6 +126,11 @@ export const areaNavGroups: AreaNavGroup[] = [
         items: [item('taxes', 'taxes-comerciales')],
       },
       {
+        label: 'Internacional',
+        description: 'Impuestos internacionales para individuos y corporaciones.',
+        items: [item('taxes', 'impuestos-internacionales')],
+      },
+      {
         label: 'IRS e identidad fiscal',
         description: 'ITIN, cartas, auditorías y deudas tributarias.',
         items: [item('taxes', 'itin'), item('taxes', 'auditorias')],
