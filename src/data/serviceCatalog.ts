@@ -98,7 +98,7 @@ export const whatsappBase = 'https://wa.me/12129232610'
 
 // Calendarios públicos de GoHighLevel. Se usan como valor por defecto cuando no
 // hay variable de entorno; el env (VITE_GHL_CALENDAR_*) sigue teniendo prioridad.
-export const HOME_CALENDAR_URL = 'https://app.christianbrokerageusa.com/widget/booking/8eNNrLbmwjcNO21JQOJB'
+export const HOME_CALENDAR_URL = 'https://app.christianbrokerageusa.com/widget/booking/9TFohhAfnej5MQEf1S0x'
 export const SERVICE_CALENDAR_URL =
   'https://app.christianbrokerageusa.com/widget/bookings/kenia-ocumares-personal-calendar-1pi_8qxbs'
 
