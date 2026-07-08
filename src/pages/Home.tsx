@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ArrowRight, Building2, CalendarDays, CheckCircle2, MessageCircle, Phone } from 'lucide-react'
 import { Hero } from '../components/sections/Hero'
+import { GhlCalendarFrame } from '../components/integrations/GhlCalendarFrame'
 import { NumberTicker } from '../components/ui/NumberTicker'
 import { fadeUp, staggerContainer, staggerItem, viewportOnce } from '../lib/motion'
 import { useVariant } from '../context/VariantContext'
@@ -269,12 +270,10 @@ function HomeBooking() {
         >
           <div className="overflow-hidden rounded-lg border border-white/15 bg-surface-card shadow-[0_28px_70px_rgba(0,0,0,0.26)]">
             {calendarSrc ? (
-              <iframe
+              <GhlCalendarFrame
                 src={calendarSrc}
                 title={tr('Calendario Christian Brokerage')}
                 id="ghl-calendar-home"
-                className="h-[720px] w-full border-0"
-                scrolling="no"
               />
             ) : (
               <div className="flex min-h-[420px] flex-col items-center justify-center p-8 text-center text-heading">

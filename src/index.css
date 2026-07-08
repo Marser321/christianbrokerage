@@ -256,6 +256,28 @@
   .optimize-render {
     content-visibility: auto;
   }
+
+  .ghl-calendar-frame {
+    min-height: 940px !important;
+  }
+}
+
+@media (min-width: 640px) {
+  .ghl-calendar-frame {
+    min-height: 880px !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .ghl-calendar-frame {
+    min-height: 780px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ghl-calendar-frame {
+    min-height: 720px !important;
+  }
 }
 
 /* ===== Logo reverso (blanco) para superficies oscuras ===== */

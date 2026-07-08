@@ -3,6 +3,7 @@ import { motion } from 'framer-motion'
 import type { ServiceVertical } from '../../data/serviceCatalog'
 import { createWhatsappHref, officePhoneDisplay, officePhoneHref } from '../../data/serviceCatalog'
 import { useLanguage } from '../../context/LanguageContext'
+import { GhlCalendarFrame } from '../integrations/GhlCalendarFrame'
 import { getCalendarSrc } from '../../lib/calendar'
 import { fadeUp, viewportOnce } from '../../lib/motion'
 
@@ -50,12 +51,10 @@ export function BookingBlock({ vertical }: BookingBlockProps) {
         >
           <div className="overflow-hidden rounded-lg border border-white/15 bg-surface-card shadow-[0_28px_70px_rgba(0,0,0,0.26)]">
             {calendarSrc ? (
-              <iframe
+              <GhlCalendarFrame
                 src={calendarSrc}
                 title={`${tr('Calendario')} ${vertical.eyebrow}`}
                 id={`ghl-calendar-${vertical.slug}`}
-                className="h-[720px] w-full border-0"
-                scrolling="no"
               />
             ) : (
               <div className="flex min-h-[420px] flex-col items-center justify-center p-8 text-center text-heading">

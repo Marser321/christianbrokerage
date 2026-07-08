@@ -1,5 +1,6 @@
 import { CalendarDays, MessageCircle, Phone } from 'lucide-react'
 import { createWhatsappHref, officePhoneDisplay, officePhoneHref } from '../../data/serviceCatalog'
+import { GhlCalendarFrame } from '../integrations/GhlCalendarFrame'
 import { getCalendarSrc } from '../../lib/calendar'
 
 export function ContactSection() {
@@ -39,12 +40,10 @@ export function ContactSection() {
         <div className="lg:col-span-7">
           <div className="overflow-hidden rounded-lg border border-white/15 bg-white shadow-[0_28px_70px_rgba(0,0,0,0.26)]">
             {calendarSrc ? (
-              <iframe
+              <GhlCalendarFrame
                 src={calendarSrc}
                 title="Calendario Christian Brokerage"
                 id="ghl-calendar-home"
-                className="h-[720px] w-full border-0"
-                scrolling="no"
               />
             ) : (
               <div className="flex min-h-[360px] flex-col items-center justify-center p-8 text-center text-primary">
