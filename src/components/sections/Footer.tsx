@@ -1,4 +1,4 @@
-import { Clock, Mail, MapPin, Phone } from 'lucide-react'
+import { Clock, Mail, MapPin, Phone, ShieldAlert } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ThemedLogo } from '../ui/ThemedLogo'
@@ -14,6 +14,37 @@ export function Footer() {
   return (
     <footer id="footer" className="border-t border-white/10 bg-surface-invert text-white">
       <div className="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <section
+          id="aviso-legal"
+          aria-labelledby="aviso-legal-title"
+          className="border-b border-white/10 py-10"
+        >
+          <div className="rounded-lg border border-accent/35 bg-white/[0.06] p-5 shadow-[0_14px_36px_rgba(0,0,0,0.14)] sm:p-7">
+            <div className="flex items-start gap-4">
+              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-accent/15 text-accent">
+                <ShieldAlert size={21} aria-hidden="true" />
+              </div>
+              <div className="max-w-5xl">
+                <h2 id="aviso-legal-title" className="text-sm font-semibold uppercase tracking-[0.16em] text-accent">
+                  Aviso legal / Legal notice
+                </h2>
+                <p className="mt-3 text-sm font-medium leading-7 text-white/90">
+                  Christian Brokerage Inc. is a private company and is not affiliated with USCIS, the U.S. Department of
+                  Homeland Security, or any government agency. We provide professional immigration assistance services in
+                  accordance with applicable New York State laws. Government filing fees are separate from our professional
+                  service fees.
+                </p>
+                <p className="mt-3 border-t border-white/10 pt-3 text-sm leading-7 text-white/65" lang="es">
+                  Christian Brokerage Inc. es una empresa privada y no está afiliada con USCIS, el Departamento de Seguridad
+                  Nacional de los Estados Unidos ni ninguna agencia gubernamental. Ofrecemos servicios profesionales de
+                  asistencia migratoria de conformidad con las leyes aplicables del Estado de Nueva York. Las tarifas de
+                  presentación gubernamentales son independientes de nuestros honorarios por servicios profesionales.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <motion.div
           variants={staggerContainer}
           initial="hidden"
