@@ -2,8 +2,10 @@ import { useEffect, useRef } from 'react'
 
 const iframeResizerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/4.3.11/iframeResizer.min.js'
 const iframeResizerScriptId = 'iframe-resizer-parent'
-const calendarFrameClassName =
+const defaultCalendarFrameClassName =
   'ghl-calendar-frame h-[940px] w-full border-0 sm:h-[880px] md:h-[780px] lg:h-[720px]'
+const contentCalendarFrameClassName =
+  'ghl-calendar-frame ghl-calendar-frame--content h-[680px] w-full border-0 md:h-[720px]'
 
 let iframeResizerLoad: Promise<void> | null = null
 
@@ -30,6 +32,7 @@ declare global {
 }
 
 type GhlCalendarFrameProps = {
+  heightMode?: 'default' | 'content'
   id: string
   src: string
   title: string
@@ -69,15 +72,17 @@ function getCalendarOrigin(src: string) {
   }
 }
 
-function getCalendarMinHeight() {
+function getCalendarMinHeight(heightMode: NonNullable<GhlCalendarFrameProps['heightMode']>) {
+  if (heightMode === 'content') return 0
   if (window.matchMedia('(min-width: 1024px)').matches) return 720
   if (window.matchMedia('(min-width: 768px)').matches) return 780
   if (window.matchMedia('(min-width: 640px)').matches) return 880
   return 940
 }
 
-export function GhlCalendarFrame({ id, src, title }: GhlCalendarFrameProps) {
+export function GhlCalendarFrame({ heightMode = 'default', id, src, title }: GhlCalendarFrameProps) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
+  const className = heightMode === 'content' ? contentCalendarFrameClassName : defaultCalendarFrameClassName
 
   useEffect(() => {
     const iframe = iframeRef.current as ResizableIframe | null
@@ -94,7 +99,7 @@ export function GhlCalendarFrame({ id, src, title }: GhlCalendarFrameProps) {
           {
             checkOrigin: [origin],
             heightCalculationMethod: 'bodyScroll',
-            minHeight: getCalendarMinHeight(),
+            minHeight: getCalendarMinHeight(heightMode),
             scrolling: true,
             warningTimeout: 0,
           },
@@ -109,7 +114,7 @@ export function GhlCalendarFrame({ id, src, title }: GhlCalendarFrameProps) {
       isMounted = false
       iframe.iFrameResizer?.close()
     }
-  }, [src])
+  }, [heightMode, src])
 
   return (
     <iframe
@@ -117,7 +122,7 @@ export function GhlCalendarFrame({ id, src, title }: GhlCalendarFrameProps) {
       src={src}
       title={title}
       id={id}
-      className={calendarFrameClassName}
+      className={className}
       data-lenis-prevent
     />
   )

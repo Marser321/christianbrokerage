@@ -274,6 +274,7 @@ function HomeBooking() {
                 src={calendarSrc}
                 title={tr('Calendario Christian Brokerage')}
                 id="ghl-calendar-home"
+                heightMode="content"
               />
             ) : (
               <div className="flex min-h-[420px] flex-col items-center justify-center p-8 text-center text-heading">

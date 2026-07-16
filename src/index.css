@@ -260,6 +260,10 @@
   .ghl-calendar-frame {
     min-height: 940px !important;
   }
+
+  .ghl-calendar-frame.ghl-calendar-frame--content {
+    min-height: 0 !important;
+  }
 }
 
 @media (min-width: 640px) {
